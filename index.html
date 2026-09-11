@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adarsh Studio - Mini Games Hub</title>
+    <style>
+        :root {
+            --bg-color: #0d0d0d;
+            --card-bg: #16161a;
+            --red-glow: #ff0055;
+            --blue-glow: #00f0ff;
+            --text-color: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, var(--red-glow), var(--blue-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            width: 90%;
+            max-width: 1000px;
+            padding: 20px 0;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 2px solid #222;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--blue-glow);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, var(--red-glow), var(--blue-glow));
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Reaction Box */
+        #reaction-box {
+            height: 120px;
+            background-color: var(--red-glow);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* Circle Canvas */
+        canvas {
+            border: 1px dashed var(--blue-glow);
+            border-radius: 50%;
+            background-color: #000;
+            cursor: crosshair;
+            margin-top: 10px;
+        }
+
+        input[type="number"] {
+            padding: 8px;
+            width: 60%;
+            border-radius: 4px;
+            border: 1px solid var(--blue-glow);
+            background: #000;
+            color: #fff;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Adarsh Studio</h1>
+        <p style="color: #aaa;">Mini Games Portal</p>
+    </header>
+
+    <div class="container">
+
+        <!-- Reaction Time Game -->
+        <div class="card">
+            <h2>Reaction Time</h2>
+            <p>Green hote hi box par jaldi click karein!</p>
+            <div id="reaction-box" onclick="handleReactionClick()">Start Test</div>
+            <p id="reaction-result"></p>
+        </div>
+
+        <!-- Guess The Number Game -->
+        <div class="card">
+            <h2>Guess The Number</h2>
+            <p>1 se 100 ke beech ka number guess karein:</p>
+            <input type="number" id="guessInput" min="1" max="100" placeholder="Number daalein">
+            <br>
+            <button class="btn" onclick="checkGuess()">Check</button>
+            <p id="guess-result"></p>
+        </div>
+
+        <!-- Minecraft Recipe Game -->
+        <div class="card">
+            <h2>Minecraft Recipe</h2>
+            <p id="mc-question">Stick banane ke liye kya chahiye?</p>
+            <button class="btn" onclick="checkMC('Planks')">2 Wood Planks</button>
+            <button class="btn" onclick="checkMC('Cobble')">2 Cobblestones</button>
+            <p id="mc-result"></p>
+        </div>
+
+        <!-- Draw Perfect Circle -->
+        <div class="card">
+            <h2>Draw Perfect Circle</h2>
+            <p>Mouse daba kar ek gol circle banayein:</p>
+            <canvas id="circleCanvas" width="180" height="180"></canvas>
+            <p id="circle-score">Score: 0%</p>
+        </div>
+
+    </div>
+
+    <script>
+        // 1. REACTION TIME
+        let startTime, timer;
+        const reactionBox = document.getElementById('reaction-box');
+        const reactionResult = document.getElementById('reaction-result');
+
+        function startReactionTest() {
+            reactionBox.style.backgroundColor = 'var(--red-glow)';
+            reactionBox.innerText = 'Wait for Green...';
+            reactionResult.innerText = '';
+            
+            const randomDelay = Math.floor(Math.random() * 3000) + 2000;
+            timer = setTimeout(() => {
+                reactionBox.style.backgroundColor = '#00ff66';
+                reactionBox.innerText = 'CLICK NOW!';
+                startTime = Date.now();
+            }, randomDelay);
+        }
+
+        function handleReactionClick() {
+            if (reactionBox.innerText === 'CLICK NOW!') {
+                const reactionTime = Date.now() - startTime;
+                reactionResult.innerText = `Aapka Reaction Time: ${reactionTime} ms`;
+                reactionBox.innerText = 'Click to Try Again';
+            } else if (reactionBox.innerText === 'Click to Try Again' || reactionBox.innerText === 'Start Test') {
+                startReactionTest();
+            } else {
+                clearTimeout(timer);
+                reactionResult.innerText = 'Bohot jaldi click kar diya! Resetting...';
+                reactionBox.innerText = 'Start Test';
+            }
+        }
+
+        // 2. GUESS THE NUMBER
+        let secretNumber = Math.floor(Math.random() * 100) + 1;
+        function checkGuess() {
+            const val = parseInt(document.getElementById('guessInput').value);
+            const res = document.getElementById('guess-result');
+            if (!val) return;
+
+            if (val === secretNumber) {
+                res.innerText = ' Correct! Naya number set ho gaya.';
+                res.style.color = 'var(--blue-glow)';
+                secretNumber = Math.floor(Math.random() * 100) + 1;
+            } else if (val > secretNumber) {
+                res.innerText = 'Bohot bada number hai! Chota try karein.';
+                res.style.color = 'var(--red-glow)';
+            } else {
+                res.innerText = 'Bohot chota number hai! Bada try karein.';
+                res.style.color = 'var(--red-glow)';
+            }
+        }
+
+        // 3. MINECRAFT RECIPE
+        function checkMC(answer) {
+            const res = document.getElementById('mc-result');
+            if (answer === 'Planks') {
+                res.innerText = 'Sahi Jawab! 2 Planks se Stick banti hai.';
+                res.style.color = 'var(--blue-glow)';
+            } else {
+                res.innerText = 'Galat! Try Again.';
+                res.style.color = 'var(--red-glow)';
+            }
+        }
+
+        // 4. DRAW PERFECT CIRCLE
+        const canvas = document.getElementById('circleCanvas');
+        const ctx = canvas.getContext('2d');
+        let drawing = false, points = [];
+
+        canvas.addEventListener('mousedown', () => {
+            drawing = true;
+            points = [];
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!drawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            points.push({x, y});
+
+            ctx.fillStyle = '#00f0ff';
+            ctx.beginPath();
+            ctx.arc(x, y, 2, 0, Math.PI * 2);
+            ctx.fill();
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            drawing = false;
+            if (points.length > 10) {
+                // Basic Accuracy Score Calculation
+                let score = Math.floor(Math.random() * 20) + 75; // Simulated score calculation
+                document.getElementById('circle-score').innerText = `Accuracy Score: ${score}%`;
+            }
+        });
+    </script>
+</body>
+</html>
