@@ -258,6 +258,222 @@
         });
     </script>
 </body>
+    ```html
+<section class="circle-game">
+  <h2>⭕ Draw a Perfect Circle</h2>
+  <p>For Mobile 📱 & PC 💻</p>
+
+  <canvas id="circleCanvas"></canvas>
+
+  <div class="game-info">
+    <div>Score: <span id="score">0</span>%</div>
+    <div>Best: <span id="best">0</span>%</div>
+  </div>
+
+  <button id="clearBtn">🔄 Try Again</button>
+</section>
+
+<style>
+.circle-game {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 25px 15px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.circle-game h2 {
+  font-size: 32px;
+  margin-bottom: 5px;
+}
+
+.circle-game p {
+  color: #777;
+  margin-bottom: 15px;
+}
+
+#circleCanvas {
+  width: 100%;
+  max-width: 600px;
+  height: 400px;
+  border: 3px dashed #777;
+  border-radius: 15px;
+  background: white;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.game-info {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin: 18px 0;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#clearBtn {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 10px;
+  background: #111;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#clearBtn:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 600px) {
+  .circle-game h2 {
+    font-size: 25px;
+  }
+
+  #circleCanvas {
+    height: 320px;
+  }
+
+  .game-info {
+    gap: 20px;
+    font-size: 17px;
+  }
+}
+</style>
+
+<script>
+const canvas = document.getElementById("circleCanvas");
+const ctx = canvas.getContext("2d");
+
+let drawing = false;
+let points = [];
+let best = Number(localStorage.getItem("circleBest") || 0);
+
+document.getElementById("best").textContent = best;
+
+function resizeCanvas() {
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+function getPoint(e) {
+  const rect = canvas.getBoundingClientRect();
+
+  return {
+    x: e.clientX - rect.left,
+    y: e.clientY - rect.top
+  };
+}
+
+canvas.addEventListener("pointerdown", e => {
+  drawing = true;
+  points = [getPoint(e)];
+
+  ctx.beginPath();
+  ctx.moveTo(points[0].x, points[0].y);
+
+  canvas.setPointerCapture(e.pointerId);
+});
+
+canvas.addEventListener("pointermove", e => {
+  if (!drawing) return;
+
+  const p = getPoint(e);
+  points.push(p);
+
+  ctx.lineTo(p.x, p.y);
+  ctx.strokeStyle = "#111";
+  ctx.lineWidth = 4;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.stroke();
+});
+
+canvas.addEventListener("pointerup", finishDrawing);
+canvas.addEventListener("pointercancel", finishDrawing);
+
+function finishDrawing() {
+  if (!drawing) return;
+
+  drawing = false;
+
+  if (points.length < 20) return;
+
+  calculateScore();
+}
+
+function calculateScore() {
+  // Calculate center using average point
+  let cx = 0;
+  let cy = 0;
+
+  points.forEach(p => {
+    cx += p.x;
+    cy += p.y;
+  });
+
+  cx /= points.length;
+  cy /= points.length;
+
+  // Average distance from center
+  let distances = points.map(p =>
+    Math.sqrt((p.x - cx) ** 2 + (p.y - cy) ** 2)
+  );
+
+  let radius =
+    distances.reduce((a, b) => a + b, 0) / distances.length;
+
+  // Calculate how consistently the radius was maintained
+  let error =
+    distances.reduce((sum, d) =>
+      sum + Math.abs(d - radius), 0
+    ) / distances.length;
+
+  let score = Math.max(
+    0,
+    Math.min(100, Math.round(100 - (error / radius) * 100))
+  );
+
+  // Bonus for closing the circle
+  const first = points[0];
+  const last = points[points.length - 1];
+
+  const gap = Math.sqrt(
+    (first.x - last.x) ** 2 +
+    (first.y - last.y) ** 2
+  );
+
+  if (gap > radius * 0.5) {
+    score = Math.max(0, score - 15);
+  }
+
+  document.getElementById("score").textContent = score;
+
+  if (score > best) {
+    best = score;
+    localStorage.setItem("circleBest", best);
+    document.getElementById("best").textContent = best;
+  }
+}
+
+document.getElementById("clearBtn").addEventListener("click", () => {
+  ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+  points = [];
+  drawing = false;
+  document.getElementById("score").textContent = "0";
+});
+</script>
+```
+
 </html>
 <div class="rating">
   <h3>Rate this website</h3>
@@ -678,3 +894,186 @@ document.addEventListener("keydown", function(e) {
 
 </body>
 </html>
+```html
+<!-- About Section -->
+<section class="about-section">
+  <div class="about-box">
+
+    <h2>🔥 About TN Warrior</h2>
+
+    <p class="intro">
+      Welcome to <strong>TN Warrior</strong> — a gaming website created
+      with passion, creativity and a lot of hard work! 🎮
+    </p>
+
+    <h3>🚀 The Story</h3>
+
+    <p>
+      TN Warrior started with a simple idea:
+      <strong>“Why not build my own gaming website?”</strong>
+      What began as a small experiment slowly turned into a complete
+      gaming project.
+    </p>
+
+    <p>
+      The journey wasn't always easy. There were coding errors, games that
+      didn't work, designs that had to be changed again and again, and
+      plenty of moments when giving up looked easier. 😅
+    </p>
+
+    <p>
+      But instead of stopping, the project kept improving. Every button,
+      every game and every design was created with patience and creativity.
+      After lots of practice and testing, <strong>TN Warrior</strong>
+      came to life. ⚡
+    </p>
+
+    <h3>💪 Built With Hard Work</h3>
+
+    <p>
+      TN Warrior is more than just a website. It represents learning,
+      experimenting and never giving up. The goal is to create a place
+      where visitors can play games, discover new features and have fun.
+    </p>
+
+    <div class="about-stats">
+      <div>
+        <span>🎮</span>
+        <strong>Mini Games</strong>
+        <small>Fun & challenging</small>
+      </div>
+
+      <div>
+        <span>🔥</span>
+        <strong>Hard Work</strong>
+        <small>Built with passion</small>
+      </div>
+
+      <div>
+        <span>🚀</span>
+        <strong>Future</strong>
+        <small>More coming soon</small>
+      </div>
+    </div>
+
+    <h3>🎮 Featured Game</h3>
+
+    <p>
+      TN Warrior also includes a fun <strong>offline-style No Internet
+      Runner Game</strong> inspired by the classic browser game that appears
+      when there is no internet connection. 🦖🌵
+    </p>
+
+    <p>
+      Try to run, jump and beat your highest score! 🏆
+    </p>
+
+    <h3>❤️ Thanks For Visiting!</h3>
+
+    <p>
+      Every visitor makes TN Warrior more special. Thanks for checking out
+      the website and supporting the project!
+    </p>
+
+    <p class="tagline">
+      <strong>TN Warrior — Play. Challenge. Enjoy. 🔥</strong>
+    </p>
+
+    <!-- Creator Info -->
+    <div class="creator-info">
+      <h3>👑 Created By</h3>
+      <p class="creator-name"><strong>Adarsh Yadav</strong></p>
+      <p>📍 From Prayagraj, India</p>
+      <p>🎮 Gaming • Coding • Creativity</p>
+    </div>
+
+    <p class="fiction-note">
+      *The story above is a fictional/creative presentation for this
+      website's About section.*
+    </p>
+
+  </div>
+</section>
+
+<style>
+.about-section {
+  padding: 60px 20px;
+  font-family: Arial, sans-serif;
+}
+
+.about-box {
+  max-width: 900px;
+  margin: auto;
+  padding: 35px;
+  border-radius: 20px;
+  background: #111;
+  color: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+.about-box h2 {
+  text-align: center;
+  font-size: 36px;
+  margin-bottom: 25px;
+}
+
+.about-box h3 {
+  color: #00d9ff;
+  margin-top: 30px;
+}
+
+.about-box p {
+  line-height: 1.7;
+  color: #ddd;
+}
+
+.intro {
+  text-align: center;
+  font-size: 19px;
+}
+
+.about-stats {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.about-stats div {
+  flex: 1;
+  min-width: 180px;
+  padding: 20px;
+  text-align: center;
+  border-radius: 15px;
+  background: #1d1d1d;
+}
+
+.about-stats span {
+  display: block;
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.about-stats strong,
+.about-stats small {
+  display: block;
+}
+
+.about-stats small {
+  color: #aaa;
+  margin-top: 6px;
+}
+
+.tagline {
+  text-align: center;
+  font-size: 20px;
+  margin-top: 30px;
+}
+
+.creator-info {
+  text-align: center;
+  margin-top: 40px;
+  padding: 25px;
+  border-radius: 15px;
+  background: #1a1
+```
