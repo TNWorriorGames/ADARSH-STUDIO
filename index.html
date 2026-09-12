@@ -1,4 +1,1248 @@
 G-ZVZTKLRMJR
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1.0,user-scalable=no">
+
+<title>TN Warrior 3D Open World</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#111;
+    font-family:Arial,sans-serif;
+}
+
+#game{
+    width:100vw;
+    height:100vh;
+}
+
+#hud{
+    position:fixed;
+    top:12px;
+    left:12px;
+    z-index:5;
+    padding:12px 16px;
+    border-radius:12px;
+    background:#000b;
+    color:white;
+    font-weight:bold;
+    line-height:1.7;
+}
+
+#mission{
+    position:fixed;
+    top:12px;
+    right:12px;
+    z-index:5;
+    padding:12px 16px;
+    border-radius:12px;
+    background:#000b;
+    color:white;
+}
+
+#start{
+    position:fixed;
+    inset:0;
+    z-index:20;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#000c;
+}
+
+.card{
+    width:min(90%,450px);
+    padding:30px;
+    border-radius:20px;
+    background:#171717;
+    color:white;
+    text-align:center;
+}
+
+.card h1{
+    margin-top:0;
+}
+
+.card button{
+    padding:14px 30px;
+    border:0;
+    border-radius:12px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* Mobile controls */
+
+#controls{
+    position:fixed;
+    left:15px;
+    right:15px;
+    bottom:20px;
+    z-index:10;
+    display:flex;
+    justify-content:space-between;
+    pointer-events:none;
+}
+
+#joystick{
+    width:160px;
+    height:160px;
+    position:relative;
+    pointer-events:auto;
+}
+
+#stick{
+    position:absolute;
+    width:65px;
+    height:65px;
+    left:48px;
+    top:48px;
+    border-radius:50%;
+    background:#ffffff99;
+}
+
+.buttons{
+    display:flex;
+    gap:8px;
+    align-items:end;
+    pointer-events:auto;
+}
+
+.buttons button{
+    width:75px;
+    height:55px;
+    border:0;
+    border-radius:14px;
+    background:#ffffffaa;
+    font-weight:bold;
+}
+
+@media(min-width:800px){
+    #controls{
+        opacity:.2;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="game"></div>
+
+<!-- START -->
+
+<div id="start">
+
+    <div class="card">
+
+        <h1>🔥 TN Warrior</h1>
+
+        <h2>3D Open World</h2>
+
+        <p>
+            Explore the city, collect coins,
+            find the mission and drive the car.
+        </p>
+
+        <p>
+            🧍 Luna &nbsp; 🚗 Franko
+        </p>
+
+        <p>
+            💻 WASD = Move<br>
+            🖱️ Mouse = Camera<br>
+            📱 Joystick = Mobile
+        </p>
+
+        <button id="play">
+            PLAY GAME
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- HUD -->
+
+<div id="hud">
+
+    💰 $<span id="money">0</span>
+
+    <br>
+
+    🚗 <span id="vehicle">On Foot</span>
+
+</div>
+
+
+<div id="mission">
+    🎯 Find the blue mission marker
+</div>
+
+
+<!-- MOBILE CONTROLS -->
+
+<div id="controls">
+
+    <div id="joystick">
+
+        <div id="stick"></div>
+
+    </div>
+
+    <div class="buttons">
+
+        <button id="carButton">
+            🚗 CAR
+        </button>
+
+        <button id="missionButton">
+            🎯 MISSION
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- THREE.JS -->
+
+<script type="module">
+
+import * as THREE
+from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+
+
+/* ==================================
+   SCENE
+================================== */
+
+const scene =
+    new THREE.Scene();
+
+scene.background =
+    new THREE.Color(0x87ceeb);
+
+
+/* ==================================
+   CAMERA
+================================== */
+
+const camera =
+    new THREE.PerspectiveCamera(
+        65,
+        innerWidth / innerHeight,
+        0.1,
+        3000
+    );
+
+camera.position.set(
+    0,
+    8,
+    14
+);
+
+
+/* ==================================
+   RENDERER
+================================== */
+
+const renderer =
+    new THREE.WebGLRenderer({
+        antialias:true
+    });
+
+renderer.setPixelRatio(
+    Math.min(
+        devicePixelRatio,
+        2
+    )
+);
+
+renderer.setSize(
+    innerWidth,
+    innerHeight
+);
+
+renderer.shadowMap.enabled = true;
+
+document
+    .getElementById("game")
+    .appendChild(renderer.domElement);
+
+
+/* ==================================
+   LIGHT
+================================== */
+
+const sun =
+    new THREE.DirectionalLight(
+        0xffffff,
+        2
+    );
+
+sun.position.set(
+    100,
+    200,
+    100
+);
+
+sun.castShadow = true;
+
+scene.add(sun);
+
+
+const ambient =
+    new THREE.HemisphereLight(
+        0xffffff,
+        0x444444,
+        1.2
+    );
+
+scene.add(ambient);
+
+
+/* ==================================
+   GROUND
+================================== */
+
+const groundGeometry =
+    new THREE.PlaneGeometry(
+        2000,
+        2000
+    );
+
+const groundMaterial =
+    new THREE.MeshStandardMaterial({
+        color:0x4f9f50
+    });
+
+const ground =
+    new THREE.Mesh(
+        groundGeometry,
+        groundMaterial
+    );
+
+ground.rotation.x =
+    -Math.PI / 2;
+
+ground.receiveShadow = true;
+
+scene.add(ground);
+
+
+/* ==================================
+   ROADS
+================================== */
+
+function createRoad(
+    x,
+    z,
+    width,
+    length
+){
+
+    const geometry =
+        new THREE.BoxGeometry(
+            width,
+            0.05,
+            length
+        );
+
+    const material =
+        new THREE.MeshStandardMaterial({
+            color:0x444444
+        });
+
+    const road =
+        new THREE.Mesh(
+            geometry,
+            material
+        );
+
+    road.position.set(
+        x,
+        0.03,
+        z
+    );
+
+    scene.add(road);
+
+}
+
+
+createRoad(
+    0,
+    0,
+    2000,
+    70
+);
+
+createRoad(
+    0,
+    400,
+    2000,
+    70
+);
+
+createRoad(
+    0,
+    -400,
+    2000,
+    70
+);
+
+createRoad(
+    0,
+    0,
+    70,
+    2000
+);
+
+createRoad(
+    400,
+    0,
+    70,
+    2000
+);
+
+createRoad(
+    -400,
+    0,
+    70,
+    2000
+);
+
+
+/* ==================================
+   BUILDINGS
+================================== */
+
+function createBuilding(
+    x,
+    z,
+    width,
+    height,
+    depth
+){
+
+    const geometry =
+        new THREE.BoxGeometry(
+            width,
+            height,
+            depth
+        );
+
+    const material =
+        new THREE.MeshStandardMaterial({
+            color:
+                new THREE.Color(
+                    Math.random() * 0.4 + 0.4,
+                    Math.random() * 0.4 + 0.4,
+                    Math.random() * 0.4 + 0.4
+                )
+        });
+
+    const building =
+        new THREE.Mesh(
+            geometry,
+            material
+        );
+
+    building.position.set(
+        x,
+        height / 2,
+        z
+    );
+
+    building.castShadow = true;
+
+    building.receiveShadow = true;
+
+    scene.add(building);
+
+}
+
+
+/* City */
+
+for(
+    let x = -900;
+    x <= 900;
+    x += 150
+){
+
+    for(
+        let z = -900;
+        z <= 900;
+        z += 150
+    ){
+
+        if(
+            Math.abs(x) < 70 ||
+            Math.abs(z) < 70 ||
+            Math.abs(x - 400) < 70 ||
+            Math.abs(z - 400) < 70
+        ){
+
+            continue;
+
+        }
+
+
+        createBuilding(
+            x,
+            z,
+            90,
+            40 +
+            Math.random() * 120,
+            90
+        );
+
+    }
+
+}
+
+
+/* ==================================
+   PLAYER
+================================== */
+
+const player =
+    new THREE.Group();
+
+scene.add(player);
+
+
+/* Body */
+
+const body =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+            1,
+            1.6,
+            0.6
+        ),
+
+        new THREE.MeshStandardMaterial({
+            color:0x222222
+        })
+
+    );
+
+body.position.y =
+    1;
+
+body.castShadow = true;
+
+player.add(body);
+
+
+/* Head */
+
+const head =
+    new THREE.Mesh(
+
+        new THREE.SphereGeometry(
+            0.4,
+            16,
+            16
+        ),
+
+        new THREE.MeshStandardMaterial({
+            color:0xffc49a
+        })
+
+    );
+
+head.position.y =
+    2.1;
+
+head.castShadow = true;
+
+player.add(head);
+
+
+/* Player position */
+
+player.position.set(
+    0,
+    0,
+    100
+);
+
+
+/* ==================================
+   CAR
+================================== */
+
+const car =
+    new THREE.Group();
+
+scene.add(car);
+
+car.position.set(
+    120,
+    0.5,
+    80
+);
+
+
+/* Car body */
+
+const carBody =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+            4,
+            1,
+            7
+        ),
+
+        new THREE.MeshStandardMaterial({
+            color:0xb51f2a
+        })
+
+    );
+
+carBody.castShadow = true;
+
+car.add(carBody);
+
+
+/* Car roof */
+
+const roof =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+            3,
+            0.8,
+            3
+        ),
+
+        new THREE.MeshStandardMaterial({
+            color:0x222222
+        })
+
+    );
+
+roof.position.y =
+    0.8;
+
+car.add(roof);
+
+
+/* ==================================
+   GAME VARIABLES
+================================== */
+
+let money = 0;
+
+let insideCar = false;
+
+let playing = false;
+
+const keys = {};
+
+
+/* ==================================
+   KEYBOARD
+================================== */
+
+window.addEventListener(
+    "keydown",
+    e => {
+
+        keys[e.code] = true;
+
+        if(e.code === "KeyE"){
+
+            toggleCar();
+
+        }
+
+        if(e.code === "KeyM"){
+
+            checkMission();
+
+        }
+
+    }
+);
+
+
+window.addEventListener(
+    "keyup",
+    e => {
+
+        keys[e.code] = false;
+
+    }
+);
+
+
+/* ==================================
+   CAR ENTER / EXIT
+================================== */
+
+function toggleCar(){
+
+    const distance =
+        player.position.distanceTo(
+            car.position
+        );
+
+
+    if(
+        !insideCar &&
+        distance < 7
+    ){
+
+        insideCar = true;
+
+        document.getElementById(
+            "vehicle"
+        ).textContent =
+            "Driving";
+
+    }
+
+    else if(insideCar){
+
+        insideCar = false;
+
+        player.position.copy(
+            car.position
+        );
+
+        player.position.x += 6;
+
+        document.getElementById(
+            "vehicle"
+        ).textContent =
+            "On Foot";
+
+    }
+
+}
+
+
+/* ==================================
+   MOBILE CAR
+================================== */
+
+document
+    .getElementById("carButton")
+    .onclick = toggleCar;
+
+
+/* ==================================
+   MISSION
+================================== */
+
+const missionMarker =
+    new THREE.Mesh(
+
+        new THREE.CylinderGeometry(
+            5,
+            5,
+            0.4,
+            32
+        ),
+
+        new THREE.MeshBasicMaterial({
+            color:0x0099ff
+        })
+
+    );
+
+missionMarker.position.set(
+    700,
+    0.3,
+    700
+);
+
+scene.add(
+    missionMarker
+);
+
+
+function checkMission(){
+
+    const distance =
+        player.position.distanceTo(
+            missionMarker.position
+        );
+
+
+    if(distance < 12){
+
+        money += 500;
+
+        document.getElementById(
+            "money"
+        ).textContent =
+            money;
+
+        document.getElementById(
+            "mission"
+        ).textContent =
+            "✅ Mission Complete! +$500";
+
+        missionMarker.visible =
+            false;
+
+    }
+
+}
+
+
+document
+    .getElementById(
+        "missionButton"
+    )
+    .onclick =
+    checkMission;
+
+
+/* ==================================
+   COINS
+================================== */
+
+const coins = [];
+
+for(
+    let i = 0;
+    i < 40;
+    i++
+){
+
+    const coin =
+        new THREE.Mesh(
+
+            new THREE.TorusGeometry(
+                1,
+                0.25,
+                10,
+                20
+            ),
+
+            new THREE.MeshStandardMaterial({
+                color:0xffd400
+            })
+
+        );
+
+
+    coin.position.set(
+
+        (Math.random() - 0.5)
+        * 1600,
+
+        1.5,
+
+        (Math.random() - 0.5)
+        * 1600
+
+    );
+
+
+    scene.add(coin);
+
+    coins.push(coin);
+
+}
+
+
+/* ==================================
+   MOBILE JOYSTICK
+================================== */
+
+const joystick =
+    document.getElementById(
+        "joystick"
+    );
+
+const stick =
+    document.getElementById(
+        "stick"
+    );
+
+let joyX = 0;
+
+let joyY = 0;
+
+let joystickActive =
+    false;
+
+
+joystick.addEventListener(
+    "pointerdown",
+    e => {
+
+        joystickActive =
+            true;
+
+        joystick.setPointerCapture(
+            e.pointerId
+        );
+
+    }
+);
+
+
+joystick.addEventListener(
+    "pointermove",
+    e => {
+
+        if(!joystickActive)
+            return;
+
+
+        const rect =
+            joystick.getBoundingClientRect();
+
+
+        let x =
+            e.clientX -
+            rect.left -
+            rect.width / 2;
+
+
+        let y =
+            e.clientY -
+            rect.top -
+            rect.height / 2;
+
+
+        const max = 55;
+
+
+        const distance =
+            Math.hypot(x,y);
+
+
+        if(distance > max){
+
+            x =
+                x / distance * max;
+
+            y =
+                y / distance * max;
+
+        }
+
+
+        joyX =
+            x / max;
+
+        joyY =
+            y / max;
+
+
+        stick.style.transform =
+            `translate(${x}px,${y}px)`;
+
+    }
+);
+
+
+function stopJoystick(){
+
+    joystickActive =
+        false;
+
+    joyX = 0;
+
+    joyY = 0;
+
+    stick.style.transform =
+        "translate(0,0)";
+
+}
+
+
+joystick.addEventListener(
+    "pointerup",
+    stopJoystick
+);
+
+joystick.addEventListener(
+    "pointercancel",
+    stopJoystick
+);
+
+
+/* ==================================
+   UPDATE
+================================== */
+
+function update(){
+
+    if(!playing)
+        return;
+
+
+    let forward =
+        0;
+
+    let turn =
+        0;
+
+
+    if(
+        keys.KeyW ||
+        keys.ArrowUp
+    ){
+
+        forward = 1;
+
+    }
+
+
+    if(
+        keys.KeyS ||
+        keys.ArrowDown
+    ){
+
+        forward = -1;
+
+    }
+
+
+    if(
+        keys.KeyA ||
+        keys.ArrowLeft
+    ){
+
+        turn = 1;
+
+    }
+
+
+    if(
+        keys.KeyD ||
+        keys.ArrowRight
+    ){
+
+        turn = -1;
+
+    }
+
+
+    /* Mobile */
+
+    if(
+        Math.abs(joyY) > 0.1
+    ){
+
+        forward =
+            -joyY;
+
+    }
+
+
+    if(
+        Math.abs(joyX) > 0.1
+    ){
+
+        turn =
+            -joyX;
+
+    }
+
+
+    if(insideCar){
+
+        car.rotation.y +=
+            turn * 0.04;
+
+        car.translateZ(
+            -forward * 0.35
+        );
+
+        player.position.copy(
+            car.position
+        );
+
+    }
+
+    else{
+
+        player.rotation.y =
+            Math.atan2(
+                -joyX,
+                -joyY
+            );
+
+        player.translateZ(
+            -forward * 0.12
+        );
+
+        player.rotation.y +=
+            turn * 0.04;
+
+    }
+
+
+    /* Coins */
+
+    coins.forEach(
+        coin => {
+
+            coin.rotation.y +=
+                0.04;
+
+
+            if(
+                coin.visible &&
+                player.position.distanceTo(
+                    coin.position
+                ) < 3
+            ){
+
+                coin.visible =
+                    false;
+
+                money += 10;
+
+                document.getElementById(
+                    "money"
+                ).textContent =
+                    money;
+
+            }
+
+        }
+    );
+
+
+    /* Camera */
+
+    const target =
+        insideCar
+        ? car
+        : player;
+
+
+    const desired =
+        new THREE.Vector3(
+            0,
+            8,
+            14
+        );
+
+
+    desired.applyAxisAngle(
+        new THREE.Vector3(0,1,0),
+        target.rotation.y
+    );
+
+
+    desired.add(
+        target.position
+    );
+
+
+    camera.position.lerp(
+        desired,
+        0.08
+    );
+
+
+    camera.lookAt(
+        target.position.x,
+        target.position.y + 1,
+        target.position.z
+    );
+
+}
+
+
+/* ==================================
+   ANIMATION
+================================== */
+
+function animate(){
+
+    requestAnimationFrame(
+        animate
+    );
+
+    update();
+
+    renderer.render(
+        scene,
+        camera
+    );
+
+}
+
+animate();
+
+
+/* ==================================
+   START
+================================== */
+
+document
+    .getElementById("play")
+    .onclick = function(){
+
+        playing = true;
+
+        document.getElementById(
+            "start"
+        ).style.display =
+            "none";
+
+    };
+
+
+/* ==================================
+   RESIZE
+================================== */
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        camera.aspect =
+            innerWidth /
+            innerHeight;
+
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(
+            innerWidth,
+            innerHeight
+        );
+
+    }
+);
+
+</script>
+
+</body>
+</html>
+```
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
