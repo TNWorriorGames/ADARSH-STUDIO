@@ -293,3 +293,388 @@ function rate(stars) {
   transform: scale(1.2);
 }
 </style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TN Warrior - Ninja Dodge</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        user-select: none;
+    }
+
+    body {
+        margin: 0;
+        background: #111;
+        color: white;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    h1 {
+        margin: 15px 0 5px;
+    }
+
+    #game {
+        position: relative;
+        width: 900px;
+        max-width: 95%;
+        height: 500px;
+        margin: 15px auto;
+        overflow: hidden;
+        border: 3px solid #fff;
+        background: linear-gradient(#15152b, #28283d);
+    }
+
+    #player {
+        position: absolute;
+        width: 45px;
+        height: 45px;
+        left: 80px;
+        bottom: 35px;
+        background: #222;
+        border: 3px solid #e00000;
+        border-radius: 10px;
+        font-size: 28px;
+        line-height: 39px;
+    }
+
+    .enemy {
+        position: absolute;
+        width: 42px;
+        height: 42px;
+        background: #c40000;
+        border-radius: 50%;
+        line-height: 42px;
+        font-size: 24px;
+    }
+
+    .coin {
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        background: gold;
+        color: #222;
+        border-radius: 50%;
+        line-height: 25px;
+        font-size: 14px;
+    }
+
+    #ground {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 30px;
+        background: #444;
+    }
+
+    #info {
+        font-size: 20px;
+        margin: 10px;
+    }
+
+    button {
+        padding: 10px 20px;
+        margin: 5px;
+        border: 0;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    #start {
+        background: #e00000;
+        color: white;
+    }
+
+    .control {
+        background: #333;
+        color: white;
+        border: 1px solid #777;
+    }
+
+    #message {
+        font-size: 22px;
+        font-weight: bold;
+        margin: 10px;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>🥷 TN WARRIOR: NINJA DODGE</h1>
+
+<div id="info">
+    ⭐ Score: <span id="score">0</span>
+    &nbsp;&nbsp;
+    ❤️ Lives: <span id="lives">3</span>
+</div>
+
+<div id="game">
+    <div id="player">🥷</div>
+    <div id="ground"></div>
+</div>
+
+<div id="message">Press START to play!</div>
+
+<button id="start">START GAME</button>
+
+<div>
+    <button class="control" onclick="moveLeft()">⬅️ LEFT</button>
+    <button class="control" onclick="jump()">⬆️ JUMP</button>
+    <button class="control" onclick="moveRight()">➡️ RIGHT</button>
+</div>
+
+<p>Keyboard: ← → to move | SPACE to jump</p>
+
+<script>
+const game = document.getElementById("game");
+const player = document.getElementById("player");
+const scoreText = document.getElementById("score");
+const livesText = document.getElementById("lives");
+const message = document.getElementById("message");
+const startButton = document.getElementById("start");
+
+let playerX = 80;
+let playerY = 35;
+
+let score = 0;
+let lives = 3;
+
+let playing = false;
+let jumping = false;
+
+let enemies = [];
+let coins = [];
+
+let enemyTimer;
+let coinTimer;
+let gameLoop;
+
+function startGame() {
+    clearEverything();
+
+    score = 0;
+    lives = 3;
+    playerX = 80;
+    playerY = 35;
+
+    updatePlayer();
+    updateInfo();
+
+    playing = true;
+    message.textContent = "Dodge the enemies and collect coins!";
+
+    enemyTimer = setInterval(createEnemy, 1000);
+    coinTimer = setInterval(createCoin, 1300);
+    gameLoop = setInterval(updateGame, 20);
+}
+
+startButton.onclick = startGame;
+
+function clearEverything() {
+    clearInterval(enemyTimer);
+    clearInterval(coinTimer);
+    clearInterval(gameLoop);
+
+    enemies.forEach(e => e.remove());
+    coins.forEach(c => c.remove());
+
+    enemies = [];
+    coins = [];
+}
+
+function updatePlayer() {
+    player.style.left = playerX + "px";
+    player.style.bottom = playerY + "px";
+}
+
+function updateInfo() {
+    scoreText.textContent = score;
+    livesText.textContent = lives;
+}
+
+function moveLeft() {
+    if (!playing) return;
+    playerX -= 25;
+
+    if (playerX < 0) playerX = 0;
+
+    updatePlayer();
+}
+
+function moveRight() {
+    if (!playing) return;
+    playerX += 25;
+
+    if (playerX > game.clientWidth - 45) {
+        playerX = game.clientWidth - 45;
+    }
+
+    updatePlayer();
+}
+
+function jump() {
+    if (!playing || jumping) return;
+
+    jumping = true;
+
+    let height = 0;
+
+    const jumpUp = setInterval(() => {
+        height += 8;
+        playerY = 35 + height;
+        updatePlayer();
+
+        if (height >= 150) {
+            clearInterval(jumpUp);
+
+            const jumpDown = setInterval(() => {
+                height -= 8;
+                playerY = 35 + height;
+                updatePlayer();
+
+                if (height <= 0) {
+                    playerY = 35;
+                    jumping = false;
+                    clearInterval(jumpDown);
+                }
+            }, 20);
+        }
+    }, 20);
+}
+
+function createEnemy() {
+    if (!playing) return;
+
+    const enemy = document.createElement("div");
+
+    enemy.className = "enemy";
+    enemy.textContent = "👹";
+
+    enemy.style.left = game.clientWidth - 45 + "px";
+    enemy.style.bottom = "35px";
+
+    game.appendChild(enemy);
+
+    enemies.push({
+        element: enemy,
+        x: game.clientWidth - 45,
+        speed: 4 + Math.random() * 3
+    });
+}
+
+function createCoin() {
+    if (!playing) return;
+
+    const coin = document.createElement("div");
+
+    coin.className = "coin";
+    coin.textContent = "★";
+
+    let x = 150 + Math.random() * (game.clientWidth - 200);
+    let y = 60 + Math.random() * 250;
+
+    coin.style.left = x + "px";
+    coin.style.bottom = y + "px";
+
+    game.appendChild(coin);
+
+    coins.push({
+        element: coin,
+        x: x,
+        y: y
+    });
+}
+
+function collision(a, b) {
+    const r1 = a.getBoundingClientRect();
+    const r2 = b.getBoundingClientRect();
+
+    return !(
+        r1.right < r2.left ||
+        r1.left > r2.right ||
+        r1.bottom < r2.top ||
+        r1.top > r2.bottom
+    );
+}
+
+function updateGame() {
+    if (!playing) return;
+
+    // Move enemies
+    enemies.forEach((enemy, index) => {
+
+        enemy.x -= enemy.speed;
+        enemy.element.style.left = enemy.x + "px";
+
+        if (collision(player, enemy.element)) {
+
+            enemy.element.remove();
+            enemies.splice(index, 1);
+
+            lives--;
+            updateInfo();
+
+            if (lives <= 0) {
+                gameOver();
+            }
+        }
+
+        if (enemy.x < -50) {
+            enemy.element.remove();
+            enemies.splice(index, 1);
+
+            score++;
+            updateInfo();
+        }
+    });
+
+    // Check coins
+    coins.forEach((coin, index) => {
+
+        if (collision(player, coin.element)) {
+
+            coin.element.remove();
+            coins.splice(index, 1);
+
+            score += 10;
+            updateInfo();
+        }
+    });
+}
+
+function gameOver() {
+    playing = false;
+
+    clearInterval(enemyTimer);
+    clearInterval(coinTimer);
+    clearInterval(gameLoop);
+
+    message.textContent = "💀 GAME OVER! Score: " + score;
+}
+
+document.addEventListener("keydown", function(e) {
+
+    if (e.key === "ArrowLeft") {
+        moveLeft();
+    }
+
+    if (e.key === "ArrowRight") {
+        moveRight();
+    }
+
+    if (e.key === " " || e.key === "ArrowUp") {
+        e.preventDefault();
+        jump();
+    }
+});
+</script>
+
+</body>
+</html>
