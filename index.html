@@ -259,3 +259,37 @@
     </script>
 </body>
 </html>
+<div class="rating">
+  <h3>Rate this website</h3>
+
+  <span onclick="rate(1)">⭐</span>
+  <span onclick="rate(2)">⭐</span>
+  <span onclick="rate(3)">⭐</span>
+  <span onclick="rate(4)">⭐</span>
+  <span onclick="rate(5)">⭐</span>
+
+  <p id="ratingText">Choose a rating</p>
+</div>
+
+<script>
+function rate(stars) {
+  document.getElementById("ratingText").innerText =
+    "You rated this " + stars + " ⭐";
+}
+</script>
+
+<style>
+.rating {
+  text-align: center;
+  margin: 30px;
+}
+
+.rating span {
+  font-size: 35px;
+  cursor: pointer;
+}
+
+.rating span:hover {
+  transform: scale(1.2);
+}
+</style>
