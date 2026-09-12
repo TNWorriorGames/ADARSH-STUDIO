@@ -1,244 +1,341 @@
-
 ```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<title>Adarsh Studia</title>
+<title>ADARSH STUDIO</title>
 
 <style>
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
-html{
-    scroll-behavior:smooth;
-}
+html{scroll-behavior:smooth}
 
 body{
     margin:0;
-    font-family:Arial,sans-serif;
-    background:#050505;
-    color:white;
+    font-family:Arial,Helvetica,sans-serif;
+    color:#fff;
+    background:
+      radial-gradient(circle at 20% 10%,#172c66 0,transparent 30%),
+      radial-gradient(circle at 80% 20%,#5d1020 0,transparent 25%),
+      #030407;
 }
+
+/* NAVIGATION */
 
 header{
     position:sticky;
     top:0;
-    z-index:100;
-    background:#050505ee;
-    border-bottom:2px solid #ff1e32;
+    z-index:99;
+    backdrop-filter:blur(18px);
+    background:#05070bdd;
+    border-bottom:1px solid #283cff;
 }
 
 nav{
-    max-width:1100px;
+    max-width:1150px;
     margin:auto;
-    padding:14px 18px;
+    padding:15px 20px;
     display:flex;
     align-items:center;
     justify-content:space-between;
 }
 
 .logo{
-    font-size:24px;
+    font-size:23px;
     font-weight:900;
-    color:#ff1e32;
+    letter-spacing:2px;
 }
 
-.logo span{
-    color:#ffd400;
-}
+.logo b{color:#ff2348}
+.logo span{color:#ffe000}
 
 nav a{
-    color:white;
+    color:#ddd;
     text-decoration:none;
-    margin-left:8px;
-    padding:9px 12px;
-    border-radius:8px;
+    margin-left:18px;
+    font-size:14px;
 }
 
-nav a:hover{
-    background:#164cff;
-}
+nav a:hover{color:#fff}
 
-section{
-    max-width:1100px;
-    margin:auto;
-    padding:65px 18px;
-}
+/* HERO */
 
 .hero{
-    min-height:80vh;
+    min-height:88vh;
     display:flex;
-    flex-direction:column;
-    justify-content:center;
     align-items:center;
+    justify-content:center;
     text-align:center;
-    background:radial-gradient(circle,#164cff22,transparent 60%);
+    padding:30px 18px;
 }
 
-h1{
-    font-size:clamp(45px,8vw,85px);
-    margin:10px 0;
+.heroBox{
+    max-width:850px;
+    padding:45px 25px;
+    border:1px solid #ffffff18;
+    border-radius:30px;
+    background:#ffffff06;
+    backdrop-filter:blur(12px);
+    box-shadow:0 0 80px #164cff20;
+}
+
+.hero h1{
+    font-size:clamp(48px,9vw,95px);
+    margin:0;
+    letter-spacing:4px;
     background:linear-gradient(
         90deg,
-        #ff1e32,
-        #ffd400,
-        #164cff
+        #ff1744,
+        #ffe000,
+        #4c72ff,
+        #ff1744
     );
+    background-size:300%;
     -webkit-background-clip:text;
     color:transparent;
+    animation:gradient 6s linear infinite;
+}
+
+@keyframes gradient{
+    to{background-position:300%}
+}
+
+.hero p{
+    color:#aeb5c7;
+    font-size:18px;
+}
+
+.btn{
+    border:0;
+    border-radius:12px;
+    padding:13px 20px;
+    margin:6px;
+    color:#fff;
+    background:#e7193f;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-2px) scale(1.03);
+    box-shadow:0 0 25px #e7193f66;
+}
+
+.blue{background:#2857ff}
+.yellow{background:#ffe000;color:#080808}
+
+/* SECTIONS */
+
+section{
+    max-width:1150px;
+    margin:auto;
+    padding:75px 20px;
 }
 
 h2{
     font-size:38px;
-}
-
-.tag{
-    color:#bbb;
-    font-size:19px;
-}
-
-.btn{
-    display:inline-block;
-    padding:13px 20px;
-    margin:8px;
-    border:0;
-    border-radius:10px;
-    color:white;
-    background:#ff1e32;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-.btn:hover{
-    transform:scale(1.04);
-}
-
-.blue{
-    background:#164cff;
-}
-
-.yellow{
-    background:#ffd400;
-    color:#111;
+    margin-bottom:30px;
 }
 
 .games{
     display:grid;
     grid-template-columns:
-    repeat(auto-fit,minmax(240px,1fr));
-    gap:18px;
+      repeat(auto-fit,minmax(260px,1fr));
+    gap:20px;
 }
 
-.game{
-    background:#111;
-    border:1px solid #333;
-    border-radius:17px;
-    padding:20px;
-    box-shadow:0 8px 25px #000;
+.card{
+    padding:22px;
+    border-radius:22px;
+    background:
+      linear-gradient(
+        145deg,
+        #ffffff0b,
+        #ffffff03
+      );
+    border:1px solid #ffffff15;
+    backdrop-filter:blur(10px);
+    box-shadow:0 15px 40px #0008;
 }
 
-.game h3{
-    color:#ffd400;
+.card h3{
+    color:#ffe000;
 }
 
 .result{
-    margin:15px 0;
-    font-size:27px;
-    color:#ffd400;
+    font-size:25px;
+    color:#ffe000;
+    margin:14px 0;
 }
 
 input{
-    width:150px;
     padding:12px;
-    border-radius:8px;
-    border:1px solid #555;
-    background:#222;
-    color:white;
+    width:140px;
+    border-radius:9px;
+    border:1px solid #444;
+    background:#11151f;
+    color:#fff;
 }
 
-.circleArea{
-    height:320px;
+/* REACTION */
+
+#reactionButton{
+    min-width:110px;
+}
+
+/* CIRCLE */
+
+.circleBox{
     position:relative;
+    height:330px;
+    border-radius:18px;
     overflow:hidden;
-    border-radius:15px;
-    background:#171717;
+    background:#05070d;
+    border:1px solid #26304c;
     touch-action:none;
 }
 
-.target{
+#circleCanvas{
+    width:100%;
+    height:100%;
+    display:block;
+}
+
+#circleTarget{
     position:absolute;
-    border:4px solid #ffd400;
+    border:3px dashed #ffe000;
     border-radius:50%;
     pointer-events:none;
+    opacity:.75;
 }
+
+/* HILL CLIMB */
 
 #hillCanvas{
+    display:block;
     width:100%;
-    max-width:500px;
-    border-radius:12px;
-    background:#8ed8ff;
+    max-width:520px;
+    height:auto;
+    border-radius:16px;
+    background:#9bdcff;
 }
 
-#warriorBox{
-    height:190px;
+/* WARRIOR */
+
+.warriorArena{
+    height:280px;
     position:relative;
     overflow:hidden;
-    border-radius:12px;
-    background:linear-gradient(#164cff,#050505);
-}
-
-#hero{
-    position:absolute;
-    left:20px;
-    top:75px;
-    font-size:36px;
-}
-
-.aboutBox{
-    background:linear-gradient(
-        135deg,
-        #16070a,
-        #080b18
-    );
-    border:1px solid #ff1e32;
     border-radius:18px;
-    padding:25px;
-    line-height:1.7;
+    background:
+      radial-gradient(circle at 50% 45%,#22295c,#05060a 65%);
+    border:1px solid #3348ff;
+}
+
+.ninja{
+    position:absolute;
+    width:42px;
+    height:55px;
+    left:40px;
+    top:110px;
+    font-size:38px;
+    filter:drop-shadow(0 0 12px #2857ff);
+}
+
+.enemy{
+    position:absolute;
+    right:45px;
+    top:105px;
+    font-size:42px;
+}
+
+/* FUTURE CITY */
+
+.city{
+    height:280px;
+    position:relative;
+    overflow:hidden;
+    border-radius:20px;
+    background:
+      linear-gradient(#050713,#171333);
+    border:1px solid #ff3156;
+}
+
+.moon{
+    position:absolute;
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    background:#ffe000;
+    right:50px;
+    top:30px;
+    box-shadow:0 0 35px #ffe00088;
+}
+
+.building{
+    position:absolute;
+    bottom:0;
+    background:#111a35;
+    border-top:2px solid #2857ff;
+}
+
+.b1{left:5%;width:15%;height:48%}
+.b2{left:23%;width:13%;height:72%}
+.b3{left:40%;width:18%;height:57%}
+.b4{left:63%;width:12%;height:82%}
+.b5{left:79%;width:16%;height:55%}
+
+.cityTitle{
+    position:absolute;
+    width:100%;
+    top:105px;
+    text-align:center;
+    font-size:30px;
+    font-weight:900;
+    letter-spacing:4px;
+    color:#fff;
+    text-shadow:0 0 20px #2857ff;
+}
+
+/* ABOUT */
+
+.about{
+    padding:28px;
+    line-height:1.8;
+    border-radius:22px;
+    background:#ffffff07;
+    border:1px solid #ffffff16;
 }
 
 footer{
-    padding:35px;
     text-align:center;
-    color:#aaa;
-    border-top:2px solid #164cff;
-    background:#030303;
+    padding:40px 20px;
+    color:#788096;
+    border-top:1px solid #283cff;
 }
 
-#rushCanvas{
-    width:100%;
-    max-width:420px;
-    background:#050505;
-    border-radius:12px;
-    touch-action:none;
-}
+/* MOBILE */
 
 @media(max-width:650px){
 
     nav{
         flex-direction:column;
-        gap:10px;
+        gap:12px;
     }
 
     nav a{
-        font-size:14px;
+        margin:0 7px;
     }
 
     section{
-        padding:50px 14px;
+        padding:55px 14px;
+    }
+
+    .heroBox{
+        padding:35px 15px;
     }
 
 }
@@ -247,98 +344,97 @@ footer{
 
 <body>
 
-
-<!-- HEADER -->
+<!-- ================= NAV ================= -->
 
 <header>
-
 <nav>
 
 <div class="logo">
-ADARSH <span>STUDIA</span>
+<b>ADARSH</b> <span>STUDIO</span>
 </div>
 
 <div>
-<a href="#home">Home</a>
-<a href="#games">Games</a>
-<a href="#about">About</a>
+<a href="#home">HOME</a>
+<a href="#games">GAMES</a>
+<a href="#about">ABOUT</a>
 </div>
 
 </nav>
-
 </header>
 
 
-<!-- HOME -->
+<!-- ================= HOME ================= -->
 
 <section id="home" class="hero">
 
-<h1>ADARSH STUDIA</h1>
+<div class="heroBox">
 
-<p class="tag">
-🎮 Mini Games • Experiments • Gaming
+<h1>ADARSH STUDIO</h1>
+
+<p>
+THE NEXT GENERATION OF MINI WEB GAMING
 </p>
 
-<a class="btn" href="#games">
-START PLAYING
+<a href="#games" class="btn">
+ENTER STUDIO
 </a>
+
+</div>
 
 </section>
 
 
-<!-- GAMES -->
+<!-- ================= GAMES ================= -->
 
 <section id="games">
 
-<h2>🎮 Games</h2>
+<h2>🎮 GAME HUB</h2>
 
 <div class="games">
 
 
 <!-- REACTION -->
 
-<div class="game">
+<div class="card">
 
-<h3>⚡ Reaction Time</h3>
+<h3>⚡ REACTION TIME</h3>
 
 <p>
-Wait for CLICK NOW and click as fast as possible.
+Wait for the signal and click as fast as you can.
 </p>
 
-<button class="btn" id="reactionButton">
+<button class="btn" id="reaction">
 START
 </button>
 
 <div class="result" id="reactionResult">
-Ready
+READY
 </div>
 
 </div>
 
 
-<!-- GUESS NUMBER -->
+<!-- GUESS -->
 
-<div class="game">
+<div class="card">
 
-<h3>🔢 Guess The Number</h3>
+<h3>🔢 GUESS THE NUMBER</h3>
 
 <p>
-Guess a number between 1 and 100.
+Find the secret number between 1 and 100.
 </p>
 
 <input
-id="guessInput"
+id="guess"
 type="number"
-min="1"
-max="100"
 placeholder="1-100">
 
-<button class="btn blue" id="guessButton">
+<button class="btn blue" id="guessBtn">
 GUESS
 </button>
 
 <div class="result" id="guessResult">
-Try it!
+READY
 </div>
 
 </div>
@@ -346,23 +442,28 @@ Try it!
 
 <!-- PERFECT CIRCLE -->
 
-<div class="game">
+<div class="card">
 
-<h3>⭕ Draw The Perfect Circle</h3>
+<h3>⭕ DRAW THE PERFECT CIRCLE</h3>
 
 <p>
-Use your mouse or finger to draw a circle.
+The yellow circle is your target.
+Your drawing appears LIVE.
+Works with mouse and touch.
 </p>
 
-<div class="circleArea" id="circleArea">
+<div class="circleBox" id="circleBox">
 
-<div class="target" id="circleTarget">
-</div>
+<canvas
+id="circleCanvas">
+</canvas>
+
+<div id="circleTarget"></div>
 
 </div>
 
 <div class="result" id="circleResult">
-Start tracing!
+SCORE: --
 </div>
 
 </div>
@@ -370,51 +471,87 @@ Start tracing!
 
 <!-- HILL CLIMB -->
 
-<div class="game">
+<div class="card">
 
-<h3>🚗 Hill Climb Racing</h3>
+<h3>🚗 HILL CLIMB</h3>
 
 <p>
-Original mini hill-driving game.
+Drive across the hills and reach the FINISH LINE.
 </p>
 
-<button class="btn yellow" id="hillButton">
-PLAY
+<button class="btn yellow" id="carStart">
+START RACE
 </button>
 
 <canvas
 id="hillCanvas"
-width="500"
-height="250">
+width="520"
+height="280">
 </canvas>
 
 <p>
-Use A/D or ←/→
+💻 PC: A/D or ←/→
+<br>
+📱 Mobile: use the buttons
 </p>
+
+<button class="btn blue" id="carLeft">
+◀
+</button>
+
+<button class="btn blue" id="carRight">
+▶
+</button>
+
+<div class="result" id="carResult">
+READY
+</div>
 
 </div>
 
 
 <!-- TN WARRIOR -->
 
-<div class="game">
+<div class="card">
 
-<h3>🕹️ TN Warrior</h3>
+<h3>🥷 TN WARRIOR</h3>
 
 <p>
-Move the character around the arena.
+Original ninja-style arena game.
+Defeat the training enemy!
 </p>
 
-<button class="btn blue" id="warriorButton">
+<button class="btn" id="warriorStart">
 PLAY
 </button>
 
-<div id="warriorBox" style="display:none">
+<div class="warriorArena"
+id="warriorArena"
+style="display:none">
 
-<div id="hero">
-🧍
+<div class="ninja" id="ninja">
+🥷
 </div>
 
+<div class="enemy" id="enemy">
+👹
+</div>
+
+</div>
+
+<p>
+💻 WASD / Arrow Keys
+<br>
+📱 Use the buttons below
+</p>
+
+<button class="btn blue" id="nLeft">◀</button>
+<button class="btn blue" id="nUp">▲</button>
+<button class="btn blue" id="nDown">▼</button>
+<button class="btn blue" id="nRight">▶</button>
+
+<div class="result" id="warriorResult">
+READY
 </div>
 
 </div>
@@ -422,65 +559,72 @@ PLAY
 
 <!-- NEON COIN RUSH -->
 
-<div class="game">
+<div class="card">
 
-<h3>⚡ Neon Coin Rush</h3>
+<h3>⚡ NEON COIN RUSH</h3>
 
 <p>
-Collect 🟡 coins and avoid 🔴 obstacles.
+Collect yellow coins and avoid red blocks.
 </p>
 
 <canvas
 id="rushCanvas"
 width="420"
-height="300">
+height="280"
+style="width:100%;border-radius:15px;background:#050505">
 </canvas>
 
-<br>
-
-<button
-class="btn"
-id="rushStart">
-START GAME
+<button class="btn" id="rushStart">
+START
 </button>
 
 <br>
 
-<button
-class="btn blue"
-id="rushLeft">
-◀ LEFT
+<button class="btn blue" id="rushLeft">
+◀
 </button>
 
-<button
-class="btn blue"
-id="rushRight">
-RIGHT ▶
+<button class="btn blue" id="rushRight">
+▶
 </button>
 
-<div
-class="result"
-id="rushScore">
-Score: 0
+<div class="result" id="rushResult">
+SCORE: 0
 </div>
 
 </div>
 
 
-<!-- GTA -->
+<!-- GTA STYLE -->
 
-<div class="game">
+<div class="card">
 
-<h3>🚧 GTA 7 — COMING SOON</h3>
+<h3>🌃 GTA 7 — COMING SOON</h3>
+
+<div class="city">
+
+<div class="moon"></div>
+
+<div class="building b1"></div>
+<div class="building b2"></div>
+<div class="building b3"></div>
+<div class="building b4"></div>
+<div class="building b5"></div>
+
+<div class="cityTitle">
+OPEN WORLD
+</div>
+
+</div>
 
 <p>
-Fictional fan-style placeholder.
-Not affiliated with Rockstar Games.
+🚧 FUTURE PROJECT
 </p>
 
-<div class="result">
-COMING SOON
-</div>
+<p style="color:#8992aa">
+Original fictional concept artwork.
+Not an official GTA 7 game or Rockstar product.
+</p>
 
 </div>
 
@@ -490,44 +634,43 @@ COMING SOON
 </section>
 
 
-<!-- ABOUT -->
+<!-- ================= ABOUT ================= -->
 
 <section id="about">
 
-<h2>👑 About Adarsh Studia</h2>
+<h2>👑 ABOUT ADARSH STUDIO</h2>
 
-<div class="aboutBox">
+<div class="about">
 
 <p>
-<strong>Adarsh Studia</strong>
-is a personal web-gaming project created by
-<strong>Adarsh Yadav</strong>.
+<strong>ADARSH STUDIO</strong> is a personal web-gaming
+project created by <strong>Adarsh Yadav</strong>.
 </p>
 
 <p>
-The idea started as a small experiment with
-HTML, CSS and JavaScript. With practice,
-creativity and lots of effort, it grew into
-a mini gaming website.
+The fictional story of the studio begins with a simple
+idea: create small browser games and turn them into a
+complete gaming hub. After experimenting with HTML,
+CSS and JavaScript, the project slowly became a futuristic
+mini-game studio.
 </p>
 
 <p>
-This About story is fictional website content
-created for the project and can be changed
-later with your real story.
+Every game on this website is designed as a learning
+experiment, with the goal of making browser gaming more
+fun on both PC and mobile.
 </p>
 
 <p>
-🔥 The goal is to keep learning, creating
-and making fun browser games.
+🔥 The studio is always looking toward the next project.
 </p>
 
 <p>
-👤 <strong>Created by Adarsh Yadav</strong>
+<b>Created by: Adarsh Yadav</b>
 </p>
 
 <p>
-📍 <strong>Prayagraj</strong>
+📍 Prayagraj
 </p>
 
 </div>
@@ -537,7 +680,7 @@ and making fun browser games.
 
 <footer>
 
-© 2026 Adarsh Studia
+© 2026 ADARSH STUDIO
 
 <br><br>
 
@@ -545,48 +688,63 @@ and making fun browser games.
 
 <br><br>
 
-Made with HTML, CSS & JavaScript
+FUTURE GAMING STARTS HERE
 
 </footer>
 
 
 <script>
 
-/* =========================
+/* =====================================================
+   GLOBAL KEYS
+===================================================== */
+
+const keys={};
+
+window.addEventListener("keydown",e=>{
+    keys[e.code]=true;
+});
+
+window.addEventListener("keyup",e=>{
+    keys[e.code]=false;
+});
+
+
+/* =====================================================
    REACTION TIME
-========================= */
-
-const reactionButton =
-document.getElementById("reactionButton");
-
-const reactionResult =
-document.getElementById("reactionResult");
+===================================================== */
 
 let reactionReady=false;
 let reactionStart=0;
 let reactionTimer;
 
-reactionButton.onclick=function(){
+const reactionBtn=
+document.getElementById("reaction");
+
+const reactionResult=
+document.getElementById("reactionResult");
+
+reactionBtn.onclick=()=>{
 
     if(reactionReady){
 
-        const time=Math.round(
+        let time=Math.round(
             performance.now()-reactionStart
         );
 
         reactionResult.textContent=
-        time+" ms";
+        time+" MS";
 
         reactionReady=false;
 
-        reactionButton.textContent="START";
+        reactionBtn.textContent="START";
 
         return;
     }
 
     reactionResult.textContent="WAIT...";
 
-    reactionButton.textContent="WAIT";
+    reactionBtn.textContent="WAIT";
 
     clearTimeout(reactionTimer);
 
@@ -594,146 +752,210 @@ reactionButton.onclick=function(){
 
         reactionReady=true;
 
-        reactionStart=performance.now();
+        reactionStart=
+        performance.now();
 
-        reactionResult.textContent="CLICK NOW!";
+        reactionResult.textContent=
+        "CLICK NOW!";
 
-        reactionButton.textContent="CLICK!";
+        reactionBtn.textContent=
+        "CLICK!";
 
-    },1200+Math.random()*3000);
+    },1000+Math.random()*3000);
 
 };
 
 
-/* =========================
+/* =====================================================
    GUESS NUMBER
-========================= */
+===================================================== */
 
-let secretNumber=
+let secret=
 Math.floor(Math.random()*100)+1;
 
-let attempts=0;
+let tries=0;
 
-document.getElementById("guessButton").onclick=function(){
+document.getElementById("guessBtn").onclick=()=>{
 
-    const value=
+    let n=
     Number(
-        document.getElementById("guessInput").value
+        document.getElementById("guess").value
     );
 
-    const output=
+    let output=
     document.getElementById("guessResult");
 
-    if(value<1 || value>100){
+    if(n<1||n>100){
 
-        output.textContent="Enter 1-100";
+        output.textContent=
+        "ENTER 1-100";
 
         return;
     }
 
-    attempts++;
+    tries++;
 
-    if(value===secretNumber){
+    if(n===secret){
 
         output.textContent=
-        "🎉 Correct! Attempts: "+attempts;
+        "🎉 CORRECT! "+tries+" TRIES";
 
-        secretNumber=
+        secret=
         Math.floor(Math.random()*100)+1;
 
-        attempts=0;
+        tries=0;
 
-    }else if(value<secretNumber){
+    }else if(n<secret){
 
-        output.textContent="⬆️ Higher!";
+        output.textContent="⬆ HIGHER";
 
     }else{
 
-        output.textContent="⬇️ Lower!";
+        output.textContent="⬇ LOWER";
 
     }
 
 };
 
 
-/* =========================
+/* =====================================================
    PERFECT CIRCLE
-========================= */
+===================================================== */
 
-const circleArea=
-document.getElementById("circleArea");
+const circleBox=
+document.getElementById("circleBox");
 
-const circleTarget=
+const canvas=
+document.getElementById("circleCanvas");
+
+const ctx=
+canvas.getContext("2d");
+
+const target=
 document.getElementById("circleTarget");
 
 const circleResult=
 document.getElementById("circleResult");
 
-function createTarget(){
+function resizeCanvas(){
 
-    const size=
-    110+Math.random()*70;
+    canvas.width=
+    circleBox.clientWidth;
 
-    circleTarget.style.width=size+"px";
+    canvas.height=
+    circleBox.clientHeight;
 
-    circleTarget.style.height=size+"px";
+    ctx.clearRect(
+        0,0,
+        canvas.width,
+        canvas.height
+    );
 
-    circleTarget.style.left=
-    (circleArea.clientWidth-size)/2+"px";
-
-    circleTarget.style.top=
-    (circleArea.clientHeight-size)/2+"px";
+    createCircleTarget();
 }
 
-createTarget();
+function createCircleTarget(){
+
+    let size=
+    Math.min(
+        180,
+        circleBox.clientWidth*.55
+    );
+
+    target.style.width=size+"px";
+    target.style.height=size+"px";
+
+    target.style.left=
+    (circleBox.clientWidth-size)/2+"px";
+
+    target.style.top=
+    (circleBox.clientHeight-size)/2+"px";
+}
 
 window.addEventListener(
 "resize",
-createTarget
+resizeCanvas
 );
 
-let drawing=false;
-let points=[];
+resizeCanvas();
 
-circleArea.addEventListener(
+
+let drawing=false;
+let circlePoints=[];
+
+circleBox.addEventListener(
 "pointerdown",
-function(e){
+e=>{
 
     drawing=true;
 
-    points=[];
+    circlePoints=[];
 
-    circleArea.setPointerCapture(
+    ctx.clearRect(
+        0,0,
+        canvas.width,
+        canvas.height
+    );
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        e.offsetX,
+        e.offsetY
+    );
+
+    circlePoints.push([
+        e.offsetX,
+        e.offsetY
+    ]);
+
+    circleBox.setPointerCapture(
         e.pointerId
     );
 
 });
 
-circleArea.addEventListener(
+
+circleBox.addEventListener(
 "pointermove",
-function(e){
+e=>{
 
     if(!drawing)return;
 
-    points.push([
+    circlePoints.push([
         e.offsetX,
         e.offsetY
     ]);
 
+    ctx.lineTo(
+        e.offsetX,
+        e.offsetY
+    );
+
+    ctx.strokeStyle=
+    "#ff3156";
+
+    ctx.lineWidth=4;
+
+    ctx.lineCap="round";
+
+    ctx.stroke();
+
 });
 
-circleArea.addEventListener(
+
+circleBox.addEventListener(
 "pointerup",
-function(){
+()=>{
 
     if(!drawing)return;
 
     drawing=false;
 
-    if(points.length<20){
+    if(circlePoints.length<20){
 
         circleResult.textContent=
-        "Draw a bigger circle!";
+        "DRAW MORE!";
 
         return;
     }
@@ -741,39 +963,41 @@ function(){
     let cx=0;
     let cy=0;
 
-    points.forEach(p=>{
+    circlePoints.forEach(p=>{
 
         cx+=p[0];
         cy+=p[1];
 
     });
 
-    cx/=points.length;
-    cy/=points.length;
+    cx/=circlePoints.length;
+    cy/=circlePoints.length;
 
-    const radii=
-    points.map(p=>
+    let radii=
+    circlePoints.map(p=>
         Math.hypot(
             p[0]-cx,
             p[1]-cy
         )
     );
 
-    const average=
-    radii.reduce((a,b)=>a+b,0)/
-    radii.length;
+    let average=
+    radii.reduce(
+        (a,b)=>a+b,
+        0
+    )/radii.length;
 
-    const deviation=
+    let deviation=
     Math.sqrt(
         radii.reduce(
-            (sum,r)=>
-            sum+Math.pow(r-average,2),
+            (s,r)=>
+            s+Math.pow(r-average,2),
             0
         )/radii.length
     );
 
     let score=Math.round(
-        100-(deviation/average)*220
+        100-(deviation/average)*250
     );
 
     score=Math.max(
@@ -782,374 +1006,474 @@ function(){
     );
 
     circleResult.textContent=
-    "⭕ Score: "+score+"/100";
-
-    createTarget();
+    "⭕ SCORE: "+score+"/100";
 
 });
 
 
-/* =========================
-   HILL CLIMB
-========================= */
+/* =====================================================
+   HILL CLIMB RACE
+===================================================== */
 
-const hill=
+const carCanvas=
 document.getElementById("hillCanvas");
 
-const hillCtx=
-hill.getContext("2d");
+const carCtx=
+carCanvas.getContext("2d");
 
-let hillPlaying=false;
-let hillX=0;
-let hillSpeed=0;
-let hillAngle=0;
+let carPlaying=false;
+let carX=20;
+let carSpeed=0;
+let distance=0;
 
-document.getElementById(
-"hillButton"
-).onclick=function(){
+let carLeft=false;
+let carRight=false;
 
-    hillPlaying=true;
 
-    hillX=0;
+document.getElementById("carStart").onclick=()=>{
 
-    hillSpeed=0;
+    carPlaying=true;
+
+    carX=20;
+
+    carSpeed=0;
+
+    distance=0;
+
+    document.getElementById(
+        "carResult"
+    ).textContent=
+    "RACING...";
+
 };
 
-function hillLoop(){
 
-    hillCtx.clearRect(
-        0,0,500,250
+document.getElementById(
+"carLeft"
+).onpointerdown=()=>carLeft=true;
+
+document.getElementById(
+"carLeft"
+).onpointerup=()=>carLeft=false;
+
+document.getElementById(
+"carRight"
+).onpointerdown=()=>carRight=true;
+
+document.getElementById(
+"carRight"
+).onpointerup=()=>carRight=false;
+
+
+function carLoop(){
+
+    carCtx.clearRect(
+        0,0,520,280
     );
 
-    hillCtx.fillStyle="#8ed8ff";
+    carCtx.fillStyle="#9bdcff";
 
-    hillCtx.fillRect(
-        0,0,500,250
+    carCtx.fillRect(
+        0,0,520,280
     );
 
-    hillCtx.fillStyle="#5ca94f";
 
-    hillCtx.beginPath();
+    /* HILLS */
 
-    for(let x=0;x<=500;x++){
+    carCtx.fillStyle="#55a84c";
 
-        const y=
-        180+
-        Math.sin((x+hillX)/45)*25+
-        Math.sin((x+hillX)/90)*15;
+    carCtx.beginPath();
 
-        hillCtx.lineTo(x,y);
+    for(let x=0;x<=520;x++){
+
+        let y=
+        190+
+        Math.sin(
+            (x+distance)/55
+        )*28+
+        Math.sin(
+            (x+distance)/110
+        )*15;
+
+        carCtx.lineTo(x,y);
     }
 
-    hillCtx.lineTo(500,250);
+    carCtx.lineTo(520,280);
+    carCtx.lineTo(0,280);
 
-    hillCtx.lineTo(0,250);
+    carCtx.fill();
 
-    hillCtx.fill();
 
-    if(hillPlaying){
+    /* FINISH LINE */
+
+    let finishX=
+    470-(distance%900);
+
+    carCtx.fillStyle="#fff";
+
+    for(let y=110;y<190;y+=20){
+
+        carCtx.fillRect(
+            finishX,
+            y,
+            12,
+            10
+        );
+
+        carCtx.fillStyle="#111";
+
+        carCtx.fillRect(
+            finishX+12,
+            y,
+            12,
+            10
+        );
+
+        carCtx.fillStyle="#fff";
+    }
+
+
+    if(carPlaying){
 
         if(
             keys.ArrowRight||
-            keys.KeyD
+            keys.KeyD||
+            carRight
         ){
-            hillSpeed+=0.08;
+            carSpeed+=.08;
         }
 
         if(
             keys.ArrowLeft||
-            keys.KeyA
+            keys.KeyA||
+            carLeft
         ){
-            hillSpeed-=0.05;
+            carSpeed-=.05;
         }
 
-        hillSpeed*=0.98;
+        carSpeed*=.985;
 
-        hillX+=hillSpeed;
+        carSpeed=
+        Math.max(
+            -2,
+            Math.min(6,carSpeed)
+        );
 
-        hillAngle=
-        Math.sin(hillX/45)*.35;
+        distance+=carSpeed;
+
     }
 
-    hillCtx.save();
 
-    hillCtx.translate(
+    /* CAR */
+
+    let ground=
+    160+
+    Math.sin(
+        (carX+distance)/55
+    )*28;
+
+    carCtx.save();
+
+    carCtx.translate(
         100,
-        150+
-        Math.sin((100+hillX)/45)*25
+        ground
     );
 
-    hillCtx.rotate(hillAngle);
-
-    hillCtx.fillStyle="#e22";
-
-    hillCtx.fillRect(
-        -35,-15,70,30
+    carCtx.rotate(
+        Math.sin(
+            (carX+distance)/55
+        )*.25
     );
 
-    hillCtx.fillStyle="#222";
+    carCtx.fillStyle="#e7193f";
 
-    hillCtx.beginPath();
-
-    hillCtx.arc(
-        -23,18,10,0,Math.PI*2
+    carCtx.fillRect(
+        -38,
+        -25,
+        76,
+        30
     );
 
-    hillCtx.arc(
-        23,18,10,0,Math.PI*2
+    carCtx.fillStyle="#111";
+
+    carCtx.fillRect(
+        -22,
+        -45,
+        44,
+        22
     );
 
-    hillCtx.fill();
+    carCtx.fillStyle="#222";
 
-    hillCtx.restore();
+    carCtx.beginPath();
+
+    carCtx.arc(
+        -25,
+        8,
+        12,
+        0,
+        Math.PI*2
+    );
+
+    carCtx.arc(
+        25,
+        8,
+        12,
+        0,
+        Math.PI*2
+    );
+
+    carCtx.fill();
+
+    carCtx.restore();
+
+
+    if(distance>900){
+
+        carPlaying=false;
+
+        document.getElementById(
+            "carResult"
+        ).textContent=
+        "🏁 FINISH! YOU WIN!";
+
+    }
+
 
     requestAnimationFrame(
-        hillLoop
+        carLoop
     );
+
 }
 
-hillLoop();
+carLoop();
 
 
-/* =========================
-   WARRIOR
-========================= */
+/* =====================================================
+   TN WARRIOR NINJA
+===================================================== */
 
-const keys={};
+const warriorArena=
+document.getElementById(
+"warriorArena"
+);
 
-window.addEventListener(
-"keydown",
-e=>{
-    keys[e.code]=true;
-});
+const ninja=
+document.getElementById(
+"ninja"
+);
 
-window.addEventListener(
-"keyup",
-e=>{
-    keys[e.code]=false;
-});
+const enemy=
+document.getElementById(
+"enemy"
+);
 
-const warriorBox=
-document.getElementById("warriorBox");
+let nx=40;
+let ny=110;
 
-const hero=
-document.getElementById("hero");
-
-let heroX=20;
-let heroY=75;
+let enemyX=0;
+let enemyY=0;
 
 document.getElementById(
-"warriorButton"
-).onclick=function(){
+"warriorStart"
+).onclick=()=>{
 
-    warriorBox.style.display="block";
+    warriorArena.style.display=
+    "block";
+
+    nx=40;
+    ny=110;
+
+    enemyX=warriorArena.clientWidth-70;
+
+    enemyY=105;
+
+    enemy.style.right="auto";
+
+    enemy.style.left=
+    enemyX+"px";
+
+    enemy.style.top=
+    enemyY+"px";
+
 };
 
-setInterval(()=>{
 
-    if(
-        warriorBox.style.display!=="block"
-    ){
-        return;
-    }
+function moveNinja(){
 
     if(
         keys.ArrowRight||
         keys.KeyD
-    ){
-        heroX=Math.min(
-            330,
-            heroX+5
-        );
-    }
+    ) nx+=4;
 
     if(
         keys.ArrowLeft||
         keys.KeyA
-    ){
-        heroX=Math.max(
-            0,
-            heroX-5
-        );
-    }
+    ) nx-=4;
 
     if(
         keys.ArrowUp||
         keys.KeyW
-    ){
-        heroY=Math.max(
-            0,
-            heroY-5
-        );
-    }
+    ) ny-=4;
 
     if(
         keys.ArrowDown||
         keys.KeyS
+    ) ny+=4;
+
+
+    nx=Math.max(
+        0,
+        Math.min(
+            warriorArena.clientWidth-45,
+            nx
+        )
+    );
+
+    ny=Math.max(
+        0,
+        Math.min(
+            warriorArena.clientHeight-60,
+            ny
+        )
+    );
+
+
+    ninja.style.left=
+    nx+"px";
+
+    ninja.style.top=
+    ny+"px";
+
+
+    if(
+        Math.abs(nx-enemyX)<45 &&
+        Math.abs(ny-enemyY)<55
     ){
-        heroY=Math.min(
-            140,
-            heroY+5
-        );
+
+        enemy.style.opacity=
+        "0.2";
+
+        document.getElementById(
+            "warriorResult"
+        ).textContent=
+        "⚔️ ENEMY HIT!";
+
+    }else{
+
+        enemy.style.opacity="1";
+
     }
 
-    hero.style.left=
-    heroX+"px";
+    requestAnimationFrame(
+        moveNinja
+    );
+}
 
-    hero.style.top=
-    heroY+"px";
-
-},30);
+moveNinja();
 
 
-/* =========================
+/* MOBILE WARRIOR BUTTONS */
+
+function holdButton(
+    id,
+    code
+){
+
+    const b=
+    document.getElementById(id);
+
+    b.addEventListener(
+        "pointerdown",
+        ()=>{
+            keys[code]=true;
+        }
+    );
+
+    b.addEventListener(
+        "pointerup",
+        ()=>{
+            keys[code]=false;
+        }
+    );
+
+    b.addEventListener(
+        "pointerleave",
+        ()=>{
+            keys[code]=false;
+        }
+    );
+}
+
+holdButton("nLeft","ArrowLeft");
+holdButton("nRight","ArrowRight");
+holdButton("nUp","ArrowUp");
+holdButton("nDown","ArrowDown");
+
+
+/* =====================================================
    NEON COIN RUSH
-========================= */
+===================================================== */
 
 const rushCanvas=
-document.getElementById("rushCanvas");
+document.getElementById(
+"rushCanvas"
+);
 
 const rushCtx=
 rushCanvas.getContext("2d");
 
 let rushPlaying=false;
-
-let rushPlayerX=210;
-
+let rushX=210;
 let rushCoins=[];
-
 let rushEnemies=[];
-
-let rushPoints=0;
-
-let rushLeft=false;
-
-let rushRight=false;
-
+let rushScore=0;
+let rushL=false;
+let rushR=false;
 let lastSpawn=0;
 
 
 document.getElementById(
 "rushStart"
-).onclick=function(){
+).onclick=()=>{
 
     rushPlaying=true;
 
-    rushPlayerX=210;
+    rushX=210;
 
     rushCoins=[];
 
     rushEnemies=[];
 
-    rushPoints=0;
+    rushScore=0;
 
     document.getElementById(
-        "rushScore"
+        "rushResult"
     ).textContent=
-    "Score: 0";
+    "SCORE: 0";
+
 };
 
 
-/* PC controls */
+document.getElementById(
+"rushLeft"
+).onpointerdown=
+()=>rushL=true;
 
-window.addEventListener(
-"keydown",
-e=>{
+document.getElementById(
+"rushLeft"
+).onpointerup=
+()=>rushL=false;
 
-    if(
-        e.code==="ArrowLeft"||
-        e.code==="KeyA"
-    ){
-        rushLeft=true;
-    }
+document.getElementById(
+"rushRight"
+).onpointerdown=
+()=>rushR=true;
 
-    if(
-        e.code==="ArrowRight"||
-        e.code==="KeyD"
-    ){
-        rushRight=true;
-    }
-
-});
-
-window.addEventListener(
-"keyup",
-e=>{
-
-    if(
-        e.code==="ArrowLeft"||
-        e.code==="KeyA"
-    ){
-        rushLeft=false;
-    }
-
-    if(
-        e.code==="ArrowRight"||
-        e.code==="KeyD"
-    ){
-        rushRight=false;
-    }
-
-});
-
-
-/* Mobile buttons */
-
-const leftButton=
-document.getElementById("rushLeft");
-
-const rightButton=
-document.getElementById("rushRight");
-
-leftButton.addEventListener(
-"pointerdown",
-()=>rushLeft=true
-);
-
-leftButton.addEventListener(
-"pointerup",
-()=>rushLeft=false
-);
-
-rightButton.addEventListener(
-"pointerdown",
-()=>rushRight=true
-);
-
-rightButton.addEventListener(
-"pointerup",
-()=>rushRight=false
-);
-
-
-function createCoin(){
-
-    rushCoins.push({
-
-        x:70+Math.random()*280,
-
-        y:-20,
-
-        speed:3+Math.random()*2
-
-    });
-
-}
-
-
-function createEnemy(){
-
-    rushEnemies.push({
-
-        x:70+Math.random()*280,
-
-        y:-20,
-
-        speed:4+Math.random()*2
-
-    });
-
-}
+document.getElementById(
+"rushRight"
+).onpointerup=
+()=>rushR=false;
 
 
 function rushLoop(time){
@@ -1159,118 +1483,126 @@ function rushLoop(time){
     );
 
     rushCtx.clearRect(
-        0,0,420,300
+        0,0,420,280
     );
 
-
-    /* background */
 
     rushCtx.fillStyle="#050505";
 
     rushCtx.fillRect(
-        0,0,420,300
+        0,0,420,280
     );
 
 
-    /* road */
-
-    rushCtx.fillStyle="#181818";
+    rushCtx.fillStyle="#151515";
 
     rushCtx.fillRect(
-        50,0,320,300
+        55,0,310,280
     );
-
-
-    /* road lines */
-
-    rushCtx.fillStyle="#ffd400";
-
-    for(
-        let y=-30;
-        y<330;
-        y+=60
-    ){
-
-        rushCtx.fillRect(
-            208,
-            y,
-            4,
-            30
-        );
-
-    }
 
 
     if(!rushPlaying){
 
-        rushCtx.fillStyle="white";
+        rushCtx.fillStyle="#fff";
 
         rushCtx.font=
-        "bold 23px Arial";
+        "bold 22px Arial";
 
         rushCtx.textAlign="center";
 
         rushCtx.fillText(
             "⚡ NEON COIN RUSH",
             210,
-            140
+            130
         );
 
-        rushCtx.font=
-        "16px Arial";
+        rushCtx.font="15px Arial";
 
         rushCtx.fillText(
-            "Press START GAME",
+            "PRESS START",
             210,
-            170
+            160
         );
 
         return;
     }
 
 
-    /* player */
+    if(
+        rushL||
+        keys.ArrowLeft||
+        keys.KeyA
+    ){
+        rushX-=5;
+    }
 
-    if(rushLeft)
-        rushPlayerX-=5;
+    if(
+        rushR||
+        keys.ArrowRight||
+        keys.KeyD
+    ){
+        rushX+=5;
+    }
 
-    if(rushRight)
-        rushPlayerX+=5;
 
-    rushPlayerX=
-    Math.max(
-        70,
-        Math.min(
-            350,
-            rushPlayerX
-        )
+    rushX=Math.max(
+        75,
+        Math.min(345,rushX)
     );
 
 
-    rushCtx.fillStyle="#164cff";
+    /* PLAYER */
+
+    rushCtx.fillStyle="#2857ff";
 
     rushCtx.fillRect(
-        rushPlayerX-18,
-        245,
+        rushX-18,
+        235,
         36,
         35
     );
 
 
-    /* coins */
+    /* SPAWN */
 
-    rushCoins.forEach(
-    coin=>{
+    if(
+        time-lastSpawn>700
+    ){
 
-        coin.y+=coin.speed;
+        rushCoins.push({
+            x:75+Math.random()*270,
+            y:-10,
+            speed:3+Math.random()*2
+        });
 
-        rushCtx.fillStyle="#ffd400";
+
+        if(Math.random()>.45){
+
+            rushEnemies.push({
+                x:75+Math.random()*270,
+                y:-20,
+                speed:4+Math.random()*2
+            });
+
+        }
+
+        lastSpawn=time;
+    }
+
+
+    /* COINS */
+
+    rushCoins.forEach(c=>{
+
+        c.y+=c.speed;
+
+        rushCtx.fillStyle="#ffe000";
 
         rushCtx.beginPath();
 
         rushCtx.arc(
-            coin.x,
-            coin.y,
+            c.x,
+            c.y,
             9,
             0,
             Math.PI*2
@@ -1280,94 +1612,65 @@ function rushLoop(time){
 
 
         if(
-            Math.abs(
-                coin.x-rushPlayerX
-            )<25 &&
-            Math.abs(
-                coin.y-260
-            )<30
+            Math.abs(c.x-rushX)<25 &&
+            Math.abs(c.y-250)<30
         ){
 
-            coin.y=400;
+            c.y=400;
 
-            rushPoints+=10;
+            rushScore+=10;
 
             document.getElementById(
-                "rushScore"
+                "rushResult"
             ).textContent=
-            "Score: "+rushPoints;
+            "SCORE: "+rushScore;
 
         }
 
     });
 
 
-    /* enemies */
+    /* ENEMIES */
 
-    rushEnemies.forEach(
-    enemy=>{
+    rushEnemies.forEach(e=>{
 
-        enemy.y+=enemy.speed;
+        e.y+=e.speed;
 
-        rushCtx.fillStyle="#ff1e32";
+        rushCtx.fillStyle="#ff1744";
 
         rushCtx.fillRect(
-            enemy.x-14,
-            enemy.y-14,
-            28,
-            28
+            e.x-13,
+            e.y-13,
+            26,
+            26
         );
 
 
         if(
-            Math.abs(
-                enemy.x-rushPlayerX
-            )<30 &&
-            Math.abs(
-                enemy.y-260
-            )<35
+            Math.abs(e.x-rushX)<30 &&
+            Math.abs(e.y-250)<35
         ){
 
             rushPlaying=false;
 
             document.getElementById(
-                "rushScore"
+                "rushResult"
             ).textContent=
-            "💥 Game Over! Score: "+
-            rushPoints;
+            "💥 GAME OVER: "+rushScore;
 
         }
 
     });
 
 
-    /* spawn */
-
-    if(
-        time-lastSpawn>700
-    ){
-
-        createCoin();
-
-        if(Math.random()>.45){
-
-            createEnemy();
-
-        }
-
-        lastSpawn=time;
-
-    }
-
-
     rushCoins=
     rushCoins.filter(
-        c=>c.y<330
+        c=>c.y<320
     );
 
     rushEnemies=
     rushEnemies.filter(
-        e=>e.y<330
+        e=>e.y<320
     );
 
 }
@@ -1381,114 +1684,7 @@ rushLoop
 </body>
 </html>
 ```
-
-
-        <!-- Draw Perfect Circle -->
-        <div class="card">
-            <h2>Draw Perfect Circle</h2>
-            <p>Mouse daba kar ek gol circle banayein:</p>
-            <canvas id="circleCanvas" width="180" height="180"></canvas>
-            <p id="circle-score">Score: 0%</p>
-        </div>
-
-    </div>
-
-    <script>
-        // 1. REACTION TIME
-        let startTime, timer;
-        const reactionBox = document.getElementById('reaction-box');
-        const reactionResult = document.getElementById('reaction-result');
-
-        function startReactionTest() {
-            reactionBox.style.backgroundColor = 'var(--red-glow)';
-            reactionBox.innerText = 'Wait for Green...';
-            reactionResult.innerText = '';
-            
-            const randomDelay = Math.floor(Math.random() * 3000) + 2000;
-            timer = setTimeout(() => {
-                reactionBox.style.backgroundColor = '#00ff66';
-                reactionBox.innerText = 'CLICK NOW!';
-                startTime = Date.now();
-            }, randomDelay);
-        }
-
-        function handleReactionClick() {
-            if (reactionBox.innerText === 'CLICK NOW!') {
-                const reactionTime = Date.now() - startTime;
-                reactionResult.innerText = `Aapka Reaction Time: ${reactionTime} ms`;
-                reactionBox.innerText = 'Click to Try Again';
-            } else if (reactionBox.innerText === 'Click to Try Again' || reactionBox.innerText === 'Start Test') {
-                startReactionTest();
-            } else {
-                clearTimeout(timer);
-                reactionResult.innerText = 'Bohot jaldi click kar diya! Resetting...';
-                reactionBox.innerText = 'Start Test';
-            }
-        }
-
-        // 2. GUESS THE NUMBER
-        let secretNumber = Math.floor(Math.random() * 100) + 1;
-        function checkGuess() {
-            const val = parseInt(document.getElementById('guessInput').value);
-            const res = document.getElementById('guess-result');
-            if (!val) return;
-
-            if (val === secretNumber) {
-                res.innerText = ' Correct! Naya number set ho gaya.';
-                res.style.color = 'var(--blue-glow)';
-                secretNumber = Math.floor(Math.random() * 100) + 1;
-            } else if (val > secretNumber) {
-                res.innerText = 'Bohot bada number hai! Chota try karein.';
-                res.style.color = 'var(--red-glow)';
-            } else {
-                res.innerText = 'Bohot chota number hai! Bada try karein.';
-                res.style.color = 'var(--red-glow)';
-            }
-        }
-
-        // 3. MINECRAFT RECIPE
-        function checkMC(answer) {
-            const res = document.getElementById('mc-result');
-            if (answer === 'Planks') {
-                res.innerText = 'Sahi Jawab! 2 Planks se Stick banti hai.';
-                res.style.color = 'var(--blue-glow)';
-            } else {
-                res.innerText = 'Galat! Try Again.';
-                res.style.color = 'var(--red-glow)';
-            }
-        }
-
-        // 4. DRAW PERFECT CIRCLE
-        const canvas = document.getElementById('circleCanvas');
-        const ctx = canvas.getContext('2d');
-        let drawing = false, points = [];
-
-        canvas.addEventListener('mousedown', () => {
-            drawing = true;
-            points = [];
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        });
-
-        canvas.addEventListener('mousemove', (e) => {
-            if (!drawing) return;
-            const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            points.push({x, y});
-
-            ctx.fillStyle = '#00f0ff';
-            ctx.beginPath();
-            ctx.arc(x, y, 2, 0, Math.PI * 2);
-            ctx.fill();
-        });
-
-        canvas.addEventListener('mouseup', () => {
-            drawing = false;
-            if (points.length > 10) {
-                // Basic Accuracy Score Calculation
-                let score = Math.floor(Math.random() * 20) + 75; // Simulated score calculation
-                document.getElementById('circle-score').innerText = `Accuracy Score: ${score}%`;
-            }
+      }
         });
     </script>
 </body>
