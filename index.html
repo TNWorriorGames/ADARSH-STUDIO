@@ -2325,6 +2325,257 @@ document.addEventListener("keydown", function(e) {
 </body>
 </html>
 ```html
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TN Warrior Coin Rush</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        background: #0b0f19;
+        color: white;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    h1 {
+        margin: 20px 0 5px;
+        color: #00e5ff;
+    }
+
+    #score {
+        font-size: 22px;
+        margin: 10px;
+    }
+
+    #game {
+        width: 700px;
+        max-width: 95vw;
+        height: 450px;
+        margin: auto;
+        position: relative;
+        overflow: hidden;
+        background:
+            linear-gradient(#111827 1px, transparent 1px),
+            linear-gradient(90deg, #111827 1px, transparent 1px);
+        background-size: 35px 35px;
+        border: 3px solid #00e5ff;
+        border-radius: 15px;
+    }
+
+    #player {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background: #00e5ff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px #00e5ff;
+    }
+
+    .coin {
+        width: 25px;
+        height: 25px;
+        position: absolute;
+        background: gold;
+        border-radius: 50%;
+        box-shadow: 0 0 15px gold;
+    }
+
+    .enemy {
+        width: 35px;
+        height: 35px;
+        position: absolute;
+        background: #ff304f;
+        border-radius: 8px;
+        box-shadow: 0 0 15px #ff304f;
+    }
+
+    button {
+        margin: 15px;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 10px;
+        background: #00e5ff;
+        color: #001018;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+    }
+
+    #message {
+        font-size: 20px;
+        font-weight: bold;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>⚡ TN WARRIOR: COIN RUSH</h1>
+
+<div id="score">Coins: 0 / 10</div>
+
+<div id="game">
+    <div id="player"></div>
+</div>
+
+<div id="message">Use WASD or Arrow Keys 🎮</div>
+
+<button onclick="restartGame()">RESTART</button>
+
+<script>
+
+const game = document.getElementById("game");
+const player = document.getElementById("player");
+const scoreText = document.getElementById("score");
+const message = document.getElementById("message");
+
+let x = 330;
+let y = 210;
+let score = 0;
+let gameOver = false;
+
+let keys = {};
+
+document.addEventListener("keydown", function(e) {
+    keys[e.key.toLowerCase()] = true;
+});
+
+document.addEventListener("keyup", function(e) {
+    keys[e.key.toLowerCase()] = false;
+});
+
+function movePlayer() {
+
+    if (gameOver) return;
+
+    let speed = 5;
+
+    if (keys["w"] || keys["arrowup"]) {
+        y -= speed;
+    }
+
+    if (keys["s"] || keys["arrowdown"]) {
+        y += speed;
+    }
+
+    if (keys["a"] || keys["arrowleft"]) {
+        x -= speed;
+    }
+
+    if (keys["d"] || keys["arrowright"]) {
+        x += speed;
+    }
+
+    // Keep player inside game
+    x = Math.max(0, Math.min(game.clientWidth - 40, x));
+    y = Math.max(0, Math.min(game.clientHeight - 40, y));
+
+    player.style.left = x + "px";
+    player.style.top = y + "px";
+
+    checkCoin();
+
+    requestAnimationFrame(movePlayer);
+}
+
+function createCoin() {
+
+    document.querySelectorAll(".coin").forEach(c => c.remove());
+
+    let coin = document.createElement("div");
+
+    coin.className = "coin";
+
+    coin.style.left =
+        Math.random() * (game.clientWidth - 25) + "px";
+
+    coin.style.top =
+        Math.random() * (game.clientHeight - 25) + "px";
+
+    game.appendChild(coin);
+}
+
+function checkCoin() {
+
+    let coin = document.querySelector(".coin");
+
+    if (!coin) return;
+
+    let p = player.getBoundingClientRect();
+    let c = coin.getBoundingClientRect();
+
+    if (
+        p.left < c.right &&
+        p.right > c.left &&
+        p.top < c.bottom &&
+        p.bottom > c.top
+    ) {
+
+        score++;
+
+        scoreText.innerText =
+            "Coins: " + score + " / 10";
+
+        coin.remove();
+
+        if (score >= 10) {
+
+            gameOver = true;
+
+            message.innerText =
+                "🏆 YOU WIN! TN WARRIOR CHAMPION!";
+
+        } else {
+
+            createCoin();
+
+        }
+    }
+}
+
+function restartGame() {
+
+    score = 0;
+    x = 330;
+    y = 210;
+    gameOver = false;
+
+    scoreText.innerText =
+        "Coins: 0 / 10";
+
+    message.innerText =
+        "Use WASD or Arrow Keys 🎮";
+
+    player.style.left = x + "px";
+    player.style.top = y + "px";
+
+    createCoin();
+
+    requestAnimationFrame(movePlayer);
+}
+
+restartGame();
+
+</script>
+
+</body>
+</html>
+```
 <!-- About Section -->
 <section class="about-section">
   <div class="about-box">
