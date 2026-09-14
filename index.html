@@ -2576,6 +2576,208 @@ restartGame();
 </body>
 </html>
 ```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TN Warrior BlockCraft</title>
+<style>
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#87ceeb;font-family:Arial}
+  #hud{position:fixed;inset:0;pointer-events:none;color:white;text-shadow:0 2px 3px #000}
+  #cross{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:28px}
+  #info{position:absolute;left:12px;top:12px;background:rgba(0,0,0,.38);padding:10px;border-radius:8px;line-height:1.45}
+  #hotbar{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:6px}
+  .slot{width:46px;height:46px;border:2px solid #ddd;background:rgba(0,0,0,.45);display:grid;place-items:center;border-radius:7px;font-weight:bold}
+  .sel{border-color:#ffd43b;box-shadow:0 0 10px #ffd43b}
+  #start{pointer-events:auto;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    padding:16px 24px;border:0;border-radius:10px;background:#111;color:#fff;font-size:18px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="hud">
+  <div id="info"><b>TN Warrior BlockCraft</b><br>
+  WASD = move &nbsp; Space = jump<br>
+  Mouse = look &nbsp; Left = break &nbsp; Right = place<br>
+  1-5 = block select
+  </div>
+  <div id="cross">+</div>
+  <div id="hotbar">
+    <div class="slot sel" data-i="1">1<br>Grass</div>
+    <div class="slot" data-i="2">2<br>Dirt</div>
+    <div class="slot" data-i="3">Stone</div>
+    <div class="slot" data-i="4">Wood</div>
+    <div class="slot" data-i="5">Glass</div>
+  </div>
+  <button id="start">CLICK TO PLAY</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script>
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x87ceeb);
+scene.fog = new THREE.Fog(0x87ceeb, 35, 95);
+
+const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, 0.1, 150);
+camera.position.set(0,7,10);
+
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+document.body.appendChild(renderer.domElement);
+
+scene.add(new THREE.HemisphereLight(0xffffff,0x668866,1.2));
+const sun = new THREE.DirectionalLight(0xffffff,1.4);
+sun.position.set(30,50,20);
+scene.add(sun);
+
+const mats = {
+ grass:new THREE.MeshLambertMaterial({color:0x4caf50}),
+ dirt:new THREE.MeshLambertMaterial({color:0x8b5a2b}),
+ stone:new THREE.MeshLambertMaterial({color:0x808080}),
+ wood:new THREE.MeshLambertMaterial({color:0x9b6a3c}),
+ glass:new THREE.MeshLambertMaterial({color:0x9de7ff,transparent:true,opacity:.55})
+};
+const names=["grass","dirt","stone","wood","glass"];
+const boxGeo=new THREE.BoxGeometry(1,1,1);
+const blocks=new Map();
+
+function key(x,y,z){return `${x},${y},${z}`}
+function addBlock(x,y,z,type="grass"){
+  if(blocks.has(key(x,y,z))) return;
+  const m=new THREE.Mesh(boxGeo,mats[type]);
+  m.position.set(x+.5,y+.5,z+.5);
+  m.userData={x,y,z,type};
+  scene.add(m);
+  blocks.set(key(x,y,z),m);
+}
+function removeBlock(m){
+  if(!m || !m.userData) return;
+  scene.remove(m);
+  blocks.delete(key(m.userData.x,m.userData.y,m.userData.z));
+}
+
+function height(x,z){
+  return Math.max(1, Math.floor(3 + Math.sin(x*.38)*1.2 + Math.cos(z*.31)*1.1 + Math.sin((x+z)*.18)));
+}
+for(let x=-28;x<=28;x++){
+  for(let z=-28;z<=28;z++){
+    let h=height(x,z);
+    for(let y=0;y<h;y++){
+      addBlock(x,y,z, y===h-1 ? "grass" : (y>h-4 ? "dirt":"stone"));
+    }
+  }
+}
+// small trees
+for(let x=-20;x<=20;x+=8){
+ for(let z=-20;z<=20;z+=9){
+  const h=height(x,z);
+  if(Math.abs(x+z)%3===0){
+    for(let y=0;y<4;y++) addBlock(x,h+y,z,"wood");
+    for(let dx=-2;dx<=2;dx++) for(let dz=-2;dz<=2;dz++)
+      if(Math.abs(dx)+Math.abs(dz)<4) addBlock(x+dx,h+3,z+dz,"grass");
+  }
+ }
+}
+
+const ray=new THREE.Raycaster();
+const center=new THREE.Vector2(0,0);
+let yaw=0,pitch=0,locked=false;
+const vel=new THREE.Vector3();
+const keys={};
+let selected="grass", onGround=false;
+
+addEventListener("keydown",e=>{
+ keys[e.code]=true;
+ if(e.code.startsWith("Digit")){
+   const n=+e.code.slice(5); if(n>=1&&n<=5){
+     selected=names[n-1];
+     document.querySelectorAll(".slot").forEach(s=>s.classList.toggle("sel",+s.dataset.i===n));
+   }
+ }
+});
+addEventListener("keyup",e=>keys[e.code]=false);
+
+document.getElementById("start").onclick=()=>renderer.domElement.requestPointerLock();
+document.addEventListener("pointerlockchange",()=>{
+ locked=document.pointerLockElement===renderer.domElement;
+ document.getElementById("start").style.display=locked?"none":"block";
+});
+document.addEventListener("mousemove",e=>{
+ if(!locked)return;
+ yaw -= e.movementX*0.0022;
+ pitch -= e.movementY*0.0022;
+ pitch=Math.max(-1.45,Math.min(1.45,pitch));
+});
+renderer.domElement.addEventListener("contextmenu",e=>e.preventDefault());
+
+addEventListener("mousedown",e=>{
+ if(!locked)return;
+ ray.setFromCamera(center,camera);
+ const hits=ray.intersectObjects([...blocks.values()]);
+ if(!hits.length)return;
+ const hit=hits[0];
+ const b=hit.object;
+ if(e.button===0){ // break, keep a simple safety floor
+   if(b.userData.y>0) removeBlock(b);
+ } else if(e.button===2){
+   const n=b.userData;
+   const normal=hit.face.normal.clone();
+   const x=n.x+Math.round(normal.x), y=n.y+Math.round(normal.y), z=n.z+Math.round(normal.z);
+   if(y>=0 && y<30 && Math.abs(x)<29 && Math.abs(z)<29) addBlock(x,y,z,selected);
+ }
+});
+
+function playerCollides(px,py,pz){
+  const r=.28,h=1.7;
+  for(let x=Math.floor(px-r);x<=Math.floor(px+r);x++)
+   for(let y=Math.floor(py);y<=Math.floor(py+h);y++)
+    for(let z=Math.floor(pz-r);z<=Math.floor(pz+r);z++)
+      if(blocks.has(key(x,y,z))) return true;
+  return false;
+}
+
+let last=performance.now();
+function loop(t){
+ requestAnimationFrame(loop);
+ const dt=Math.min((t-last)/1000,.05); last=t;
+
+ camera.rotation.order="YXZ";
+ camera.rotation.y=yaw; camera.rotation.x=pitch;
+
+ const forward=new THREE.Vector3(Math.sin(yaw),0,Math.cos(yaw));
+ const right=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw));
+ let dir=new THREE.Vector3();
+ if(keys.KeyW) dir.add(forward);
+ if(keys.KeyS) dir.sub(forward);
+ if(keys.KeyD) dir.add(right);
+ if(keys.KeyA) dir.sub(right);
+ if(dir.lengthSq()) dir.normalize();
+
+ const speed=5.2;
+ vel.x=THREE.MathUtils.lerp(vel.x,dir.x*speed,Math.min(1,dt*10));
+ vel.z=THREE.MathUtils.lerp(vel.z,dir.z*speed,Math.min(1,dt*10));
+ vel.y-=18*dt;
+ if(keys.Space && onGround){vel.y=7.2;onGround=false}
+
+ const old=camera.position.clone();
+ let nx=old.x+vel.x*dt, nz=old.z+vel.z*dt;
+ if(!playerCollides(nx,old.y,nz)){camera.position.x=nx;camera.position.z=nz}
+ let ny=old.y+vel.y*dt;
+ if(playerCollides(camera.position.x,ny-0.05,camera.position.z)){
+   if(vel.y<0){onGround=true;vel.y=0}
+ }else{camera.position.y=ny;onGround=false}
+ if(camera.position.y<1){camera.position.y=1;vel.y=0;onGround=true}
+ renderer.render(scene,camera);
+}
+loop(performance.now());
+
+addEventListener("resize",()=>{
+ camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)
+});
+</script>
+</body>
+</html>
 <!-- About Section -->
 <section class="about-section">
   <div class="about-box">
